@@ -56,9 +56,30 @@ function QuickBasketballPage() {
     );
   }
 
-  //Move Team to End
-  const moveTeamEnd = () => {
+  //Pluck Team from Front of list
+  const removeFinishedTeam = (count:number) => {
+    let finishedTeam;
+    setPlayers(function (players) {
 
+      let playerList =[...players];
+      finishedTeam = playerList.splice(0, count);
+      localStorage.setItem('players', JSON.stringify(playerList))
+
+      return playerList;
+      })
+    return finishedTeam;
+  }
+
+  // Append Returning Team to End of List
+  const AppendReturningTeam = (players:Player[]) => {
+    setPlayers(function (players) {
+
+      let playerList =[...players].concat(players);
+
+      localStorage.setItem('players', JSON.stringify(playerList))
+
+      return playerList;
+      });
   }
 
   const getPlayerPos = (id:UniqueIdentifier) => players?.findIndex(player => player.id === id)
@@ -93,7 +114,7 @@ function QuickBasketballPage() {
   return (
 
     <div>
-      <ScoreBoard />
+      <ScoreBoard teamOne={players.slice(0,5)} teamTwo={players.slice(5,10)}/>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}

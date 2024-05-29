@@ -22,10 +22,10 @@ const Home = () => {
         <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
-              Welcome to 1g Honda Insight!
+              Welcome to Who Got Next!
             </h1>
             <p className="mt-4 mb-6 text-lg text-gray-600">
-              A place where you can find all things 1st Gen Honda Insight.
+              A place where you can track player rotations for your pick up games.
             </p>
             <Link to="/about" className="mt-6">
               <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded">
@@ -42,7 +42,7 @@ const Home = () => {
           <div className="text-center">
             <h2 className="text-3xl font-extrabold text-gray-900">Site Features</h2>
             <p className="mt-4 text-lg text-gray-600">
-              Learn all about the Honda Insight.
+              Tired of losing track of who got next at your open gym?
             </p>
           </div>
           {/* Feature cards */}
@@ -50,19 +50,14 @@ const Home = () => {
             {/* Feature 1 */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900">Online Marketplace Listings</h3>
+                <h3 className="text-xl font-bold text-gray-900">Basketball</h3>
                 <p className="mt-4 text-gray-600">
-                  Browse Listings from FB Marketplace, Offerup
+                  5 person team rotation
                 </p>
                 <div className="mt-6 flex justify-between">
-                  <Link to="/listings/fb">
+                  <Link to="/guest/basketball">
                     <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded">
-                      Facebook
-                    </a>
-                  </Link>
-                  <Link to="/listings/offerup">
-                    <a className="bg-emerald-700 hover:bg-emerald-900 text-white font-bold py-3 px-8 rounded place-self-end">
-                      Offerup
+                      Try it!
                     </a>
                   </Link>
                 </div>
