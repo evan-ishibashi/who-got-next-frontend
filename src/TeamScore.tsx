@@ -17,7 +17,7 @@ function TeamScore({ teamName, teamMembers, updateScore, score }: { teamName:num
         <h1>
             {`Team ${teamName}`}
             </h1>
-        <h2 className='text-4xl mb-3'>{score}</h2>
+        <h2 className='text-6xl mb-3'>{score}</h2>
         <div className='flex flex-row justify-evenly'>
             <PointButton pointValue={1} updateScore={updateScore} />
             <PointButton pointValue={2} updateScore={updateScore}/>

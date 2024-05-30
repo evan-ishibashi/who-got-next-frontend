@@ -12,30 +12,47 @@ import ScoreBoard from './Scoreboard';
  *
  */
 
+const TEAMSIZE = 5;
+
 function QuickBasketballPage() {
   const [players, setPlayers] = useState< Player[]>([]);
+  const [gameLive, setGameLive] = useState<boolean>(false);
+  const [playerId, setPlayerId] = useState<number>(1);
+
+  let teamOne = players.slice(0,TEAMSIZE);
+  let teamTwo = players.slice(TEAMSIZE, TEAMSIZE * 2);
+  let teamNext = players.slice(TEAMSIZE * 2, TEAMSIZE * 3);
 
 
   useEffect(function setLocalStorage(): void {
-    let stored = localStorage.getItem('players')
-    if (stored) {
-      setPlayers(JSON.parse(stored))
-    }
+    let players = localStorage.getItem('players');
+    let playerId = localStorage.getItem('playerId');
+    if (players) setPlayers(JSON.parse(players));
+    if (playerId) setPlayerId(JSON.parse(playerId));
+
   }, []);
+
+  //Toggles Game Live from True/False
+  const gameToggle = () => {
+    setGameLive((gameLive) => !gameLive);
+  }
 
 
   //Add Player to List
   const addPlayer = (name:String, idx:number) => {
     if(idx === players.length) {
-      localStorage.setItem('players', JSON.stringify([...players, {id:players.length, name:name}]))
-      setPlayers((players) => [...players, {id:players.length, name:name}]);
+      localStorage.setItem('players', JSON.stringify([...players, {id:playerId, name:name}]))
+      setPlayers((players) => [...players, {id:playerId, name:name}]);
+      localStorage.setItem('playerId', JSON.stringify(playerId +1));
+      setPlayerId((playerId) => playerId +1);
 
     } else {
       setPlayers(function (players) {
 
         let playerList =[...players];
-        playerList.splice(idx, 0, {id:players.length, name:name});
+        playerList.splice(idx, 0, {id:playerId, name:name});
         localStorage.setItem('players', JSON.stringify(playerList))
+        setPlayerId((playerId) => playerId +1);
 
         return playerList;
       }
@@ -114,7 +131,7 @@ function QuickBasketballPage() {
   return (
 
     <div>
-      <ScoreBoard teamOne={players.slice(0,5)} teamTwo={players.slice(5,10)}/>
+      <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle}/>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
