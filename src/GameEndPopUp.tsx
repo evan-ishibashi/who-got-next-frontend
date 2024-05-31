@@ -2,52 +2,143 @@ import { useState, useEffect, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import Player from './types';
 import GameEndPlayerCard from './GameEndPlayerCard';
-//
+import { overlayStyle } from './GameEndPopUpStyle.tsx'
 
-const GameEndPopUp = ({gameLive, winningTeam, losingTeam, teamNext, isTied}:{gameLive:boolean, winningTeam:Player[], losingTeam:Player[], teamNext:Player[], isTied:boolean}) => {
+//Settings
+const TEAMROTATIONSETTING:string = 'playTwo';
+// const TEAMROTATIONSETTING:string = 'winnerStays';
+// const TEAMROTATIONSETTING = 'bothOff';
+
+
+const GameEndPopUp = ({gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTied, rotatePlayers, resetAllScore}:{gameLive:boolean, teamOne:Player[], teamTwo:Player[], teamNext:Player[], teamOneWins:boolean, isTied:boolean, rotatePlayers:Function, resetAllScore:Function}) => {
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
-  const [isFirst, setIsFirst] = useState(true);
+
+  const [checkBoxOne, setCheckBoxOne] = useState<boolean>(false);
+  const [checkBoxTwo, setCheckBoxTwo] = useState<boolean>(false);
+  const [rotatingTeam, setRotatingTeam] = useState<string>('first');
+  const [isFirstMount, setIsFirstMount] = useState(true);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
 
 
+// Use Effect Section
+
+// Handles Pop Up Appearing and turning off First Mount
   useEffect(()=>{
-    if(!gameLive && !isFirst){
+    if(!gameLive && !isFirstMount){
+        clearInterval(timerRef.current!);
+
+        if(TEAMROTATIONSETTING === 'playTwo'){
+            setCheckBoxOne(false);
+            setCheckBoxTwo(true);
+         } else if (TEAMROTATIONSETTING === 'winnerStays'){
+            if(teamOneWins){
+                setCheckBoxOne(true);
+                setCheckBoxTwo(false);
+            } else {
+                setCheckBoxOne(false);
+                setCheckBoxTwo(true);
+            }
+         } else if (TEAMROTATIONSETTING === 'bothOff'){
+             setCheckBoxOne(false);
+             setCheckBoxTwo(false);
+          }
+
         setOpen(true);
-    } else if (isFirst){
-        setIsFirst(false);
+        timerRef.current = setTimeout(dismountPopUp, 15000)
+    } else if (isFirstMount){
+        setIsFirstMount(false);
     }
   },[gameLive]);
 
+// Handles rotating players on Pop-up Close
+  useEffect(()=>{
+    if(!open && !isFirstMount){
+        rotatePlayers(rotatingTeam);
+        resetAllScore()
+    }
+  },[open])
+
+  // ! means that team rotates
+  useEffect(()=>{
+    if(checkBoxOne && checkBoxTwo){
+       setRotatingTeam('none');
+    } else if (checkBoxOne && !checkBoxTwo){
+        setRotatingTeam('second');
+    } else if (!checkBoxOne && checkBoxTwo){
+        setRotatingTeam('first');
+    } else if (!checkBoxOne && !checkBoxTwo){
+        setRotatingTeam('both');
+    }
+  },[checkBoxOne, checkBoxTwo])
+
+// Helper Functions
+
+
+  const dismountPopUp = () => {
+    closeModal();
+  }
+
+  const handleCheckBoxOne = () => {
+    setCheckBoxOne(!checkBoxOne)
+  }
+
+  const handleCheckBoxTwo = () => {
+    setCheckBoxTwo(!checkBoxTwo)
+  }
+
+
+
 
   return (
-      <Popup open={open} closeOnDocumentClick onClose={closeModal}>
+      <Popup
+        open={open}
+        onClose={closeModal}
+        {...{ modal:true, closeOnDocumentClick:true, overlayStyle }}
+      >
         <div className="modal">
           <a className="close" onClick={closeModal}>
             &times;
           </a>
           <div className='flex flex-col'>
-            <div className='flex flex-row'>
-                <div className='flex flex-col text-center bg-green-300'>
-                    <h1 className='text-4xl'>Winning Team</h1>
+            <div className='grid grid-flow-row grid-cols-2 grid-row-1'>
+                <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100': teamOneWins ? 'bg-green-300' : 'bg-red-300'}`}>
+                    <h1 className='text-4xl bg-gray-200'>
+                        {isTied ? 'You Tied' : teamOneWins ? "Winning Team": "Losing Team" }
+                        </h1>
                     {
-                        winningTeam.map((player:Player)=>(
-                            <div>
-                                <GameEndPlayerCard player={player}/>
-                            </div>
+                        teamOne.map((player:Player, idx)=>(
+
+                                <GameEndPlayerCard key={idx} player={player}/>
+
                         ))}
+
+                        <div className='mt-2'>
+                            <input type="checkbox" checked={checkBoxOne} onChange={handleCheckBoxOne} className='w-4 h-4 ml-4'/>
+                            Home Team Stays?
+                        </div>
                 </div>
-                <div className='flex flex-col text-center bg-red-300'>
-                    <h1 className='text-4xl'>Losing Team</h1>
+                <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100': teamOneWins ?  'bg-red-300' : 'bg-green-300'}`}>
+                <h1 className='text-4xl bg-gray-200'>
+                        {isTied ? 'You Tied' : teamOneWins ? "Losing Team": "Winning Team" }
+                        </h1>
                     {
-                        losingTeam.map((player:Player)=>(
-                            <div>
-                                <GameEndPlayerCard player={player}/>
-                            </div>
+                        teamTwo.map((player:Player, idx)=>(
+                                <GameEndPlayerCard key={idx}player={player}/>
                         ))}
+                        <div className='mt-2'>
+                            <input type="checkbox" checked={checkBoxTwo}  onChange={handleCheckBoxTwo} className='w-4 h-4 ml-4'/>
+                            Away Team Stays?
+                        </div>
                 </div>
             </div>
-            <div className='flex flex'>
+            <div className='text-center bg-white'>
+                <h1 className='text-4xl bg-yellow-300'>Up Next</h1>
+                {
+                        teamNext.map((player:Player, idx)=>(
+                                <GameEndPlayerCard key={idx} player={player}/>
+                        ))}
 
             </div>
           </div>

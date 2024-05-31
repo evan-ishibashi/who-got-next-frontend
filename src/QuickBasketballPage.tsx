@@ -41,8 +41,8 @@ function QuickBasketballPage() {
   //Add Player to List
   const addPlayer = (name:String, idx:number) => {
     if(idx === players.length) {
-      localStorage.setItem('players', JSON.stringify([...players, {id:playerId, name:name}]))
-      setPlayers((players) => [...players, {id:playerId, name:name}]);
+      localStorage.setItem('players', JSON.stringify([...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0}]))
+      setPlayers((players) => [...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0}]);
       localStorage.setItem('playerId', JSON.stringify(playerId +1));
       setPlayerId((playerId) => playerId +1);
 
@@ -50,7 +50,7 @@ function QuickBasketballPage() {
       setPlayers(function (players) {
 
         let playerList =[...players];
-        playerList.splice(idx, 0, {id:playerId, name:name});
+        playerList.splice(idx, 0, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0});
         localStorage.setItem('players', JSON.stringify(playerList))
         setPlayerId((playerId) => playerId +1);
 
@@ -73,30 +73,32 @@ function QuickBasketballPage() {
     );
   }
 
-  //Pluck Team from Front of list
-  const removeFinishedTeam = (count:number) => {
-    let finishedTeam;
-    setPlayers(function (players) {
+// rotates Teams: input rotating Team === 'first', 'second', or 'both'
+  const rotatePlayers = (rotatingTeam:string) => {
+    console.log('Team Rotated off', rotatingTeam)
+    if(rotatingTeam === 'none') return;
+
+    let finishedTeam:Player[];
+
+      setPlayers(function (players) {
 
       let playerList =[...players];
-      finishedTeam = playerList.splice(0, count);
-      localStorage.setItem('players', JSON.stringify(playerList))
 
-      return playerList;
-      })
-    return finishedTeam;
-  }
+      if(rotatingTeam === "first"){
+        finishedTeam = playerList.splice(0, TEAMSIZE);
+      } else if(rotatingTeam === 'second') {
+        finishedTeam = playerList.splice(TEAMSIZE, TEAMSIZE);
+      } else if (rotatingTeam === 'both') {
+        finishedTeam = playerList.splice(0, TEAMSIZE * 2);
+      }
+      let rotatedList = playerList.concat(finishedTeam);
+      console.log(rotatedList)
+      localStorage.setItem('players', JSON.stringify(rotatedList))
 
-  // Append Returning Team to End of List
-  const AppendReturningTeam = (players:Player[]) => {
-    setPlayers(function (players) {
+      return rotatedList;
 
-      let playerList =[...players].concat(players);
-
-      localStorage.setItem('players', JSON.stringify(playerList))
-
-      return playerList;
-      });
+    }
+  )
   }
 
   const getPlayerPos = (id:UniqueIdentifier) => players?.findIndex(player => player.id === id)
@@ -131,7 +133,7 @@ function QuickBasketballPage() {
   return (
 
     <div>
-      <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle}/>
+      <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle} rotatePlayers={rotatePlayers} setPlayers={setPlayers}/>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}

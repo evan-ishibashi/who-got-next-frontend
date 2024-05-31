@@ -26,14 +26,14 @@ function QuickPlayerCard({ id, idx, player, addPlayer, removePlayer, color }: { 
     <div
         ref={setNodeRef}
         style={style}
-        className={`max-w-full md:max-w-sm rounded overflow-hidden shadow-lg ${color}
+        className={`max-w-full md:max-w-full rounded overflow-hidden shadow-lg ${color}
         transition-all duration-500 cursor-pointer flex flex-row justify-between`}
     >
         <div className="pt-1 pl-1">
 
          <CardPopUp player={player} addPlayer={addPlayer} removePlayer={removePlayer} idx={idx} />
         </div>
-        <div className="self-center flex flex-row">
+        <div className="self-center flex flex-row text-bold text-2xl">
             {`${idx + 1}. `}{player.name}
         </div>
         <div className="pr-2 pt-1 touch-none">

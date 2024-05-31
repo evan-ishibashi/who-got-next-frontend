@@ -4,6 +4,8 @@ import Player from "./types.tsx";
 import GameEndPopUp from './GameEndPopUp.tsx';
 
 import {useEffect, useState} from 'react'
+import TeamScoreNext from "./TeamScoreNext.tsx";
+import TeamScoreGameNotStarted from "./TeamScoreGameNotStarted.tsx";
 /** QuickBasketballPlayerList: displays list of Players
  *
  * Props:
@@ -12,12 +14,17 @@ import {useEffect, useState} from 'react'
 
 const WINNINGSCORE = 15;
 
-function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive }: {teamOne:Player[], teamTwo:Player[],teamNext:Player[], gameLive:boolean, setGameLive:Function }) {
+function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotatePlayers, setPlayers }: {teamOne:Player[], teamTwo:Player[],teamNext:Player[], gameLive:boolean, setGameLive:Function, rotatePlayers:Function, setPlayers:Function }) {
     const [teamOneScore, setTeamOneScore] = useState(0);
     const [teamTwoScore, setTeamTwoScore] = useState(0);
+    const [isFirstMount, setIsFirstMount] = useState<boolean>(true);
+    const [gameHasStarted, setGameHasStarted] = useState(false);
+    const [fullDisplay, setFullDisplay] = useState<boolean>(true);
+    const [teamOneLabel, setTeamOneLabel] = useState<String>("Home");
+    const [teamTwoLabel, setTeamTwoLabel] = useState<String>("Away");
+    const [teamOneWins, setTeamOneWins] = useState<boolean>(false);
 
-    let winningTeam = teamOneScore > teamTwoScore ? teamOne : teamTwo;
-    let losingTeam = teamOneScore < teamTwoScore ? teamOne : teamTwo;
+
     let isTied = teamOneScore === teamTwoScore ? true : false;
 
     useEffect(()=>{
@@ -32,22 +39,52 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive }: {team
 
     useEffect(()=>{
         if (teamOneScore > teamTwoScore){
-            winningTeam = teamOne;
-            losingTeam = teamTwo;
+            setTeamOneWins(true);
+
         }
         if (teamOneScore < teamTwoScore){
-            winningTeam = teamTwo;
-            losingTeam = teamTwo;
+            setTeamOneWins(false);
         }
         if(gameLive){
-            setTeamOneScore(0);
-            setTeamTwoScore(0);
+           resetAllScore();
+           setFullDisplay(true);
+           teamStatusLive();
         }
+        if(!gameLive && !isFirstMount){
+            teamStatusBreak();
+            setFullDisplay(false);
+        }
+        setIsFirstMount(false)
 
     },[gameLive]);
 
-    const handleClick = () => {
-        setGameLive(gameLive)
+    const resetAllScore = () => {
+        setTeamOneScore(0);
+        setTeamTwoScore(0);
+    }
+
+    const teamStatusBreak = () => {
+        setTeamOneLabel("You're Playing Again:");
+        setTeamTwoLabel("You're On:");
+    }
+
+    const teamStatusLive = () => {
+        setTeamOneLabel("Home");
+        setTeamTwoLabel("Away");
+    }
+
+    const handleEndClick = () => {
+        setGameLive()
+    }
+
+    const handleListReset = () => {
+        localStorage.clear();
+        setPlayers([])
+
+    }
+
+    const toggleGameHasStarted = (bool:boolean) => {
+        setGameHasStarted(()=> bool)
     }
 
 
@@ -72,20 +109,52 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive }: {team
     return (
         <>
 
-            <div className='flex flex-row justify-evenly'>
-                <TeamScore teamName={1} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score} />
-                <Clock gameLive={gameLive} setGameLive={setGameLive}/>
-                <TeamScore teamName={2} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score} />
+            <div className='flex flex-row justify-evenly '>
+                {
+                    fullDisplay
+                    ?
+                        gameHasStarted
+                        ?
+                        <TeamScore teamName={teamOneLabel} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score}/>
+                        :
+                        <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne} score={teamTwoScore}/>
+                    :
+                    <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
+                }
+                <Clock gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
+                {
+                    fullDisplay
+                    ?
+                        gameHasStarted
+                        ?
+
+                        <TeamScore teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score}/>
+                        :
+                        <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore}/>
+                    :
+                    <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                }
             </div>
-            <div className="flex flex-row justify-center">
+            <div className="flex flex-row justify-center bg-white mb-2 pb-2">
                 <button
-                    className={`${gameLive ? 'bg-orange-500 hover:bg-orange-700 text-white' : 'bg-gray-300 text-black'}font-bold px-4 rounded mt-2 mb-2`}
-                    onClick={handleClick}
-                    disabled={!gameLive}
+                    className={`${gameHasStarted ? 'bg-orange-500 hover:bg-orange-700 text-white font-bold': 'bg-gray-300 text-black'} px-4 rounded mt-2 mb-2 mr-1`}
+                    onClick={handleEndClick}
+                    disabled={!gameHasStarted}
                     >
-                        End Game
+                        { gameLive ?
+                            "End Game"
+                            :
+                            "End Break"
+
+                        }
                 </button>
-                <GameEndPopUp gameLive={gameLive} winningTeam={winningTeam} losingTeam={losingTeam} teamNext={teamNext} isTied={isTied} />
+                <button
+                    className={'bg-orange-500 hover:bg-orange-700 text-white font-bold px-4 rounded mt-2 mb-2'}
+                    onClick={handleListReset}
+                    >
+                        Reset Players
+                </button>
+                <GameEndPopUp gameLive={gameLive} teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} teamOneWins={teamOneWins} isTied={isTied} rotatePlayers={rotatePlayers} resetAllScore={resetAllScore}/>
             </div>
         </>
 

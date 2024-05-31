@@ -1,13 +1,12 @@
 import Player from './types.tsx'
-import PointButton from './PointButton.tsx';
 import ScoreBoardName from './ScoreBoardName.tsx'
-/** TeamScore: displays scoreboard
+/** TeamScoreGameNotStarted: displays scoreboard
  *
  * Props:
  * - players like [{listing},...]
  */
 
-function TeamScore({ teamName, teamMembers, updateScore, score }: { teamName:String, teamMembers:Player[], updateScore:(value: number) => void, score:number}) {
+function TeamScoreGameNotStarted({ teamName, teamMembers, score }: { teamName:String, teamMembers:Player[], score:number}) {
 
 
     return (
@@ -29,12 +28,9 @@ function TeamScore({ teamName, teamMembers, updateScore, score }: { teamName:Str
 
             </div>
 
-        <h2 className='text-6xl mb-4 mt-3 bg-white'>{score}</h2>
+        <h2 className='text-6xl mb-4 mt-3 bg-white'>YO CHECK UP</h2>
         <div className='flex flex-row justify-evenly'>
-            <PointButton pointValue={1} updateScore={updateScore} />
-            <PointButton pointValue={2} updateScore={updateScore}/>
-            <PointButton pointValue={3} updateScore={updateScore}/>
-            <PointButton pointValue={-1} updateScore={updateScore}/>
+            Please Start Game
         </div>
 
 
@@ -44,4 +40,4 @@ function TeamScore({ teamName, teamMembers, updateScore, score }: { teamName:Str
     );
   }
 
-export default TeamScore;
+export default TeamScoreGameNotStarted;

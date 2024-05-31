@@ -15,6 +15,8 @@ function NavBar() {
         </li>
         <li className="">
           <Link to="/home">Home</Link>
+        </li>
+        <li className="">
           <Link to="/guest/basketball">Basketball</Link>
         </li>
 

@@ -11,7 +11,7 @@ const CONVERT2SECONDS = 60;
 
 import { useState, useRef, useEffect } from 'react';
 
-const Clock = ({gameLive, setGameLive}:{gameLive:boolean, setGameLive:Function}) => {
+const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gameLive:boolean, setGameLive:Function, toggleGameHasStarted:Function, resetAllScore:Function}) => {
     const [time, setTime] = useState<number>(GAMETIME * CONVERT2SECONDS); // Initial time in seconds
     const [isActive, setIsActive] = useState<boolean>(false);
     const [localGame, setLocalGame] = useState<boolean>(false);
@@ -47,6 +47,7 @@ const Clock = ({gameLive, setGameLive}:{gameLive:boolean, setGameLive:Function})
                     } else {
                         (console.log("second option triggered gameLive FALSE"))
                         setTime(GAMETIME * CONVERT2SECONDS);
+                        toggleGameHasStarted(false);
                         setLocalGame(true);
                     }
                     setGameLive();
@@ -67,14 +68,24 @@ const Clock = ({gameLive, setGameLive}:{gameLive:boolean, setGameLive:Function})
 
     useEffect(()=>{
         console.log('gameLive in 2ns Use effect', gameLive)
+        console.log('isActive in 2nd Use Effect', isActive)
         // console.log('localGame', localGame)
-        if(!gameLive && localGame){
+        if(!gameLive && localGame && isActive){
             clearInterval(timerRef.current!);
-            console.log(timerRef.current)
             setIsActive(false);
+            toggleGameHasStarted(false);
             setTime(RESTTIME * CONVERT2SECONDS);
             setEndTime(null);
             setLocalGame(!localGame)
+        }
+
+        if(gameLive && !localGame && isActive){
+            clearInterval(timerRef.current!);
+            setIsActive(false);
+            toggleGameHasStarted(false);
+            setTime(GAMETIME * CONVERT2SECONDS);
+            setEndTime(null);
+            setLocalGame(localGame)
             // startTimer();
         }
     },[gameLive])
@@ -87,10 +98,15 @@ const Clock = ({gameLive, setGameLive}:{gameLive:boolean, setGameLive:Function})
             setLocalGame(true)
             setIsFirstMount(false)
         }
+        if(gameLive){
+            setLocalGame(true)
+        }
         clearInterval(timerRef.current!)
         const now = new Date().getTime();
         const end = new Date(now + time * 1000);
         setIsActive(true);
+
+        toggleGameHasStarted(true);
         setEndTime(end);
     };
 
@@ -102,6 +118,8 @@ const Clock = ({gameLive, setGameLive}:{gameLive:boolean, setGameLive:Function})
     const resetTimer = () => {
         clearInterval(timerRef.current!);
         setIsActive(false);
+        toggleGameHasStarted(false);
+        resetAllScore();
         setTime(GAMETIME * CONVERT2SECONDS); // Reset to initial time
         setEndTime(null);
     };
@@ -111,15 +129,19 @@ const Clock = ({gameLive, setGameLive}:{gameLive:boolean, setGameLive:Function})
         const minutes = Math.floor((time / 60) % 60);
 
     return (
-        <div className="timer-container w-1/3 text-center">
-            <div hidden={isFirstMount}>{
+        <div className="timer-container w-1/3 text-center bg-white">
+            <div
+                hidden={isFirstMount}
+                className='text-4xl'
+            >
+                {
                 gameLive ?
                 "Game Clock"
                 :
                 "Next Game Starts in:"
                 }
             </div>
-            <div hidden={!isFirstMount}>
+            <div hidden={!isFirstMount} className='text-4xl'>
                 Welcome, Press Start
             </div>
             <div className="text-8xl">{`${minutes}:${seconds > 9 ? seconds : '0' + seconds}`}</div>
@@ -130,9 +152,9 @@ const Clock = ({gameLive, setGameLive}:{gameLive:boolean, setGameLive:Function})
                     <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded ml-2 mr-2'onClick={startTimer}>Start</button>
                 }
                 <button
-                    className={`${gameLive ? 'bg-blue-500 hover:bg-blue-700 text-white font-bold': 'bg-gray-300 text-black'}  px-4 rounded ml-2 mr-2`}
+                    className={`${(localGame) ? 'bg-blue-500 hover:bg-blue-700 text-white font-bold': 'bg-gray-300 text-black'}  px-4 rounded ml-2 mr-2`}
                     onClick={resetTimer}
-                    disabled={!gameLive}>Reset</button>
+                    disabled={!localGame}>Reset</button>
             </div>
         </div>
     );

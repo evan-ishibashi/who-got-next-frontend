@@ -18,11 +18,14 @@ function GameEndPlayerCard({ player }: {player: Player}) {
 
 
   return (
-    <div className="flex flex-row text-center">
+    <div className="flex flex-row justify-center">
 
-        <div className="">
+        <div className="text-3xl">
             {player.name}
         </div>
+        {/* <div className="text-small pl-2">
+            w: {player.winCount}
+        </div> */}
     </div>
   );
 }
