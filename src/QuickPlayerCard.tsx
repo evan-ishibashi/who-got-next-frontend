@@ -26,7 +26,7 @@ function QuickPlayerCard({ id, idx, player, addPlayer, removePlayer, color }: { 
     <div
         ref={setNodeRef}
         style={style}
-        className={`max-w-full md:max-w-full rounded overflow-hidden shadow-lg ${color}
+        className={`max-w-full min-w-full rounded shadow-lg ${color}
         transition-all duration-500 cursor-pointer flex flex-row justify-between`}
     >
         <div className="pt-1 pl-1">
