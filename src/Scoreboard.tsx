@@ -117,7 +117,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                         ?
                         <TeamScore teamName={teamOneLabel} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score}/>
                         :
-                        <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne} score={teamTwoScore}/>
+                        <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne}/>
                     :
                     <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
                 }
@@ -130,7 +130,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
 
                         <TeamScore teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score}/>
                         :
-                        <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore}/>
+                        <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo}/>
                     :
                     <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
                 }

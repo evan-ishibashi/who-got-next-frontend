@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 
 
 /** BasketballPage: Handles fetching and displaying whole marketplace listing page
@@ -7,13 +7,13 @@ import { useState, useEffect } from 'react';
  *
  */
 
-function BasketballPage() {
-  const [players, setPlayers] = useState< [] | null>([]);
+// function BasketballPage() {
+//   const [players, setPlayers] = useState< [] | null>([]);
 
-  return (
-    <div className=''>
-    </div>
-  );
-}
+//   return (
+//     <div className=''>
+//     </div>
+//   );
+// }
 
-export default BasketballPage;
+// export default BasketballPage;

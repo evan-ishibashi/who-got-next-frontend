@@ -6,7 +6,7 @@ import ScoreBoardName from './ScoreBoardName.tsx'
  * - players like [{listing},...]
  */
 
-function TeamScoreGameNotStarted({ teamName, teamMembers, score }: { teamName:String, teamMembers:Player[], score:number}) {
+function TeamScoreGameNotStarted({ teamName, teamMembers }: { teamName:String, teamMembers:Player[]}) {
 
 
     return (
