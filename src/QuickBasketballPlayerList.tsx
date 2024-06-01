@@ -22,7 +22,8 @@ function QuickBasketballPlayerList({ players, addPlayer, removePlayer }: { playe
             <QuickPlayerCard id={player.id} idx={idx} key={player.id} player={player} addPlayer={addPlayer} removePlayer={removePlayer} color={(idx % 10) > 4 ? 'bg-orange-200' : 'bg-white'} />
         ))}
         {players.length < 40 &&
-        <QuickAddPlayer addPlayer={addPlayer} playersCount={players.length}/>
+
+            <QuickAddPlayer addPlayer={addPlayer} playersCount={players.length}/>
     }
         </SortableContext>
       </div>
