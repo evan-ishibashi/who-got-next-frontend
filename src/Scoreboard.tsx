@@ -78,7 +78,9 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
     }
 
     const handleListReset = () => {
+        let backup = localStorage.players;
         localStorage.clear();
+        localStorage.setItem('backup',backup)
         setPlayers([])
 
     }

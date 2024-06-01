@@ -70,7 +70,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         console.log('gameLive in 2ns Use effect', gameLive)
         console.log('isActive in 2nd Use Effect', isActive)
         // console.log('localGame', localGame)
-        if(!gameLive && localGame && isActive){
+        if(!gameLive && localGame){
             clearInterval(timerRef.current!);
             setIsActive(false);
             toggleGameHasStarted(false);
@@ -79,7 +79,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
             setLocalGame(!localGame)
         }
 
-        if(gameLive && !localGame && isActive){
+        if(gameLive && !localGame){
             clearInterval(timerRef.current!);
             setIsActive(false);
             toggleGameHasStarted(false);
