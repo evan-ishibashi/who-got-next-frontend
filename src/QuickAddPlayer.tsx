@@ -21,7 +21,7 @@ function QuickAddPlayer({ addPlayer, playersCount }: { addPlayer:Function, playe
         setInput('');
     }
   return (
-    <div className="max-w-full md:max-w-sm rounded overflow-hidden shadow-lg bg-white transition-all duration-500 cursor-pointer">
+    <div className="max-w-full md:max-w-full rounded overflow-hidden shadow-lg bg-white transition-all duration-500 cursor-pointer">
         <div className='flex justify-center'>
             <form onSubmit={handleSubmit}>
 
