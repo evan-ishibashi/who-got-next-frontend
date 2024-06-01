@@ -15,7 +15,7 @@ function QuickBasketballPlayerList({ players, addPlayer, removePlayer }: { playe
 
     return (
 
-      <div className={`grid-container grid-cols-1 justify-evenly grid-flow-col gap-2 md:grid  md:gap-2 md:grid-cols-4 md:grid-rows-10`}>
+      <div className={`grid-container grid-cols-1 justify-evenly grid-flow-col gap-2 md:grid  md:gap-2 md:${players.length < 31 ? 'grid-cols-3':'grid-cols-4'} md:grid-rows-10`}>
         <SortableContext items = {players!} strategy={verticalListSortingStrategy}>
 
         {players?.map((player:Player, idx) => (
