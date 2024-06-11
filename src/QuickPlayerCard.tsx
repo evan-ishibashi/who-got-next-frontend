@@ -33,7 +33,7 @@ function QuickPlayerCard({ id, idx, player, addPlayer, removePlayer, color }: { 
 
          <CardPopUp player={player} addPlayer={addPlayer} removePlayer={removePlayer} idx={idx} />
         </div>
-        <div className="self-center flex flex-row text-bold text-2xl">
+        <div className="self-center flex flex-row text-bold text-3xl">
             {`${idx + 1}. `}{player.name}
         </div>
         <div className="pr-2 pt-1 touch-none">

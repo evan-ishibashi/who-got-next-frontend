@@ -28,7 +28,7 @@ function TeamScoreGameNotStarted({ teamName, teamMembers }: { teamName:String, t
 
             </div>
 
-        <h2 className='text-6xl mb-4 mt-3 bg-white'>YO CHECK UP</h2>
+        <h2 className='text-small md:text-6xl md:mb-4 md:mt-3 bg-white'>CHECK IT UP</h2>
         <div className='flex flex-row justify-evenly'>
             Please Start Game
         </div>

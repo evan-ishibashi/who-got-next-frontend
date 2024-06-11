@@ -16,7 +16,7 @@ function PointButton({ pointValue, updateScore }: { pointValue:number, updateSco
 
      <button
         onClick={handleClick}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded-full ml-2 mr-2 text-2xl">
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold md:px-4 md:rounded-full md:ml-2 md:mr-2 text-small md:text-2xl">
         {pointValue > 0 ? `+${pointValue}`: pointValue}
      </button>
 

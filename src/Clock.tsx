@@ -18,6 +18,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
     const [isFirstMount, setIsFirstMount] = useState<boolean>(true);
     const [endTime, setEndTime] = useState<Date | null>(null);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const buzzerSound = useRef<HTMLAudioElement>(null)
 
     useEffect(() => {
         if (timerRef.current) {
@@ -124,6 +125,11 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         setEndTime(null);
     };
 
+    // const playBuzzer = () => {
+    //     if(playBuzzer) {
+    //         playBuzzer.current.play()
+    // }
+
 
         const seconds = Math.floor(time % 60);
         const minutes = Math.floor((time / 60) % 60);
@@ -132,7 +138,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         <div className="timer-container w-1/3 text-center bg-white">
             <div
                 hidden={isFirstMount}
-                className='text-4xl'
+                className='text-small md:text-4xl'
             >
                 {
                 gameLive ?
@@ -141,10 +147,10 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
                 "Next Game Starts in:"
                 }
             </div>
-            <div hidden={!isFirstMount} className='text-4xl'>
+            <div hidden={!isFirstMount} className='text-small md:text-4xl'>
                 Welcome, Press Start
             </div>
-            <div className="text-8xl">{`${minutes}:${seconds > 9 ? seconds : '0' + seconds}`}</div>
+            <div className="text-xl md:text-8xl">{`${minutes}:${seconds > 9 ? seconds : '0' + seconds}`}</div>
             <div className="buttons">
                 { isActive ?
                     <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded ml-2 mr-2'onClick={pauseTimer}>Pause</button>
@@ -156,6 +162,13 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
                     onClick={resetTimer}
                     disabled={!localGame}>Reset</button>
             </div>
+            {/* <div>
+                <audio ref={buzzerSound}>
+                    <source src="sound.mp3" type="audio/mpeg" />
+                    <p>Your browser does not support the audio element.</p>
+                </audio>
+                <button onClick={playBuzzer}>Play Sound</button>
+            </div> */}
         </div>
     );
 };
