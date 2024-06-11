@@ -18,7 +18,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
     const [isFirstMount, setIsFirstMount] = useState<boolean>(true);
     const [endTime, setEndTime] = useState<Date | null>(null);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-    const buzzerSound = useRef<HTMLAudioElement>(null)
+    // const buzzerSound = useRef<HTMLAudioElement>(null)
 
     useEffect(() => {
         if (timerRef.current) {
