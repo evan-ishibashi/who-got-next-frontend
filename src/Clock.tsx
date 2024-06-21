@@ -5,11 +5,14 @@
  * - players like [{listing},...]
  */
 
-const GAMETIME = 7;
+const GAMETIME = 0.1;
 const RESTTIME = 1
 const CONVERT2SECONDS = 60;
 
 import { useState, useRef, useEffect } from 'react';
+import hornSound from './audio/buzzer/horn.mp3'
+// @ts-ignore
+import useSound from 'use-sound';
 
 const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gameLive:boolean, setGameLive:Function, toggleGameHasStarted:Function, resetAllScore:Function}) => {
     const [time, setTime] = useState<number>(GAMETIME * CONVERT2SECONDS); // Initial time in seconds
@@ -18,7 +21,9 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
     const [isFirstMount, setIsFirstMount] = useState<boolean>(true);
     const [endTime, setEndTime] = useState<Date | null>(null);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-    // const buzzerSound = useRef<HTMLAudioElement>(null)
+    const buzzerSound = new Audio(hornSound)
+
+
 
     useEffect(() => {
         if (timerRef.current) {
@@ -36,10 +41,11 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
                 setTime(remainingTime);
 
                 if (remainingTime === 0) {
-                    console.log('gameLive is', gameLive)
+                    console.log('gameLive is', gameLive);
                     clearInterval(timerRef.current!);
                     setIsActive(false);
                     if (gameLive) {
+                        buzzerSound.play();
                         console.log("first option triggered gameLive TRUE")
                         console.log(RESTTIME * CONVERT2SECONDS)
                         setTime(RESTTIME * CONVERT2SECONDS);
@@ -125,17 +131,13 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         setEndTime(null);
     };
 
-    // const playBuzzer = () => {
-    //     if(playBuzzer) {
-    //         playBuzzer.current.play()
-    // }
 
-
-        const seconds = Math.floor(time % 60);
-        const minutes = Math.floor((time / 60) % 60);
+    const seconds = Math.floor(time % 60);
+    const minutes = Math.floor((time / 60) % 60);
 
     return (
         <div className="timer-container w-1/3 text-center bg-white">
+
             <div
                 hidden={isFirstMount}
                 className='text-small md:text-4xl'
@@ -162,13 +164,6 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
                     onClick={resetTimer}
                     disabled={!localGame}>Reset</button>
             </div>
-            {/* <div>
-                <audio ref={buzzerSound}>
-                    <source src="sound.mp3" type="audio/mpeg" />
-                    <p>Your browser does not support the audio element.</p>
-                </audio>
-                <button onClick={playBuzzer}>Play Sound</button>
-            </div> */}
         </div>
     );
 };
