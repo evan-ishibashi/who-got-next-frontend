@@ -5,7 +5,7 @@
  * - players like [{listing},...]
  */
 
-const GAMETIME = 0.1;
+const GAMETIME = 7;
 const RESTTIME = 1
 const CONVERT2SECONDS = 60;
 
