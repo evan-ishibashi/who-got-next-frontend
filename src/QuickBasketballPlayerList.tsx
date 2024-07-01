@@ -1,8 +1,10 @@
 import QuickAddPlayer from "./QuickAddPlayer.tsx";
 import QuickPlayerCard from "./QuickPlayerCard.tsx";
-import Player from "./types.tsx";
+import {Player} from "./types.tsx";
+import { useContext } from "react";
 
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { settingsContext } from "./QuickBasketballPage.tsx";
 
 /** QuickBasketballPlayerList: displays list of Players
  *
@@ -11,7 +13,8 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
  */
 
 function QuickBasketballPlayerList({ players, addPlayer, removePlayer }: { players: Player[], addPlayer:(name:string,idx:number)=> void, removePlayer:Function }) {
-
+  const config = useContext(settingsContext);
+  const teamSize = config?.settings.teamSize!;
 
     return (
 
@@ -19,7 +22,15 @@ function QuickBasketballPlayerList({ players, addPlayer, removePlayer }: { playe
         <SortableContext items = {players!} strategy={verticalListSortingStrategy}>
 
         {players?.map((player:Player, idx) => (
-            <QuickPlayerCard id={player.id} idx={idx} key={player.id} player={player} addPlayer={addPlayer} removePlayer={removePlayer} color={(idx % 10) > 4 ? 'bg-orange-200' : 'bg-white'} />
+            <QuickPlayerCard
+              id={player.id}
+              idx={idx}
+              key={player.id}
+              player={player}
+              addPlayer={addPlayer}
+              removePlayer={removePlayer}
+              color={(idx % (teamSize * 2)) > (teamSize - 1)  ? 'bg-orange-200' : 'bg-white'}
+              />
         ))}
         {players.length < 40 &&
 

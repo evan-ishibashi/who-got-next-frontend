@@ -8,4 +8,20 @@ type Player = {
     tieCount:number
 }
 
-export default Player;
+type Settings = {
+    teamSize: number,
+    gameClockMins: number,
+    gameClockSecs: number,
+    restClockMins: number,
+    restClockSecs: number,
+    winningScore: number,
+    teamRotation: string,
+
+}
+
+type quickBasketballContext = {
+    settings:Settings,
+    setSettings:Function
+}
+
+export type {Player, Settings, quickBasketballContext};

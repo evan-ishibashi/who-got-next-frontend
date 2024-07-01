@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import QuickBasketballPlayerList from './QuickBasketballPlayerList';
 import { DndContext, PointerSensor, UniqueIdentifier, closestCorners, useSensors, useSensor, TouchSensor, KeyboardSensor } from '@dnd-kit/core';
-import Player from './types'
+import {Player, Settings, quickBasketballContext} from './types';
+import { DEFAULT_SETTINGS } from './Utils';
+import { createContext } from "react";
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import ScoreBoard from './Scoreboard';
 
@@ -12,16 +14,19 @@ import ScoreBoard from './Scoreboard';
  *
  */
 
-const TEAMSIZE = 5;
+
+export const settingsContext = createContext<quickBasketballContext | null>(null);
+
 
 function QuickBasketballPage() {
   const [players, setPlayers] = useState< Player[]>([]);
   const [gameLive, setGameLive] = useState<boolean>(false);
   const [playerId, setPlayerId] = useState<number>(1);
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
 
-  let teamOne = players.slice(0,TEAMSIZE);
-  let teamTwo = players.slice(TEAMSIZE, TEAMSIZE * 2);
-  let teamNext = players.slice(TEAMSIZE * 2, TEAMSIZE * 3);
+  let teamOne = players.slice(0,settings!.teamSize);
+  let teamTwo = players.slice(settings!.teamSize, settings!.teamSize * 2);
+  let teamNext = players.slice(settings!.teamSize * 2, settings!.teamSize * 3);
 
 
   useEffect(function setLocalStorage(): void {
@@ -85,11 +90,11 @@ function QuickBasketballPage() {
       let playerList =[...players];
 
       if(rotatingTeam === "first"){
-        finishedTeam = playerList.splice(0, TEAMSIZE);
+        finishedTeam = playerList.splice(0, settings.teamSize);
       } else if(rotatingTeam === 'second') {
-        finishedTeam = playerList.splice(TEAMSIZE, TEAMSIZE);
+        finishedTeam = playerList.splice(settings.teamSize, settings.teamSize);
       } else if (rotatingTeam === 'both') {
-        finishedTeam = playerList.splice(0, TEAMSIZE * 2);
+        finishedTeam = playerList.splice(0, settings.teamSize * 2);
       }
       let rotatedList = playerList.concat(finishedTeam);
       console.log(rotatedList)
@@ -133,15 +138,17 @@ function QuickBasketballPage() {
   return (
 
     <div>
-      <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle} rotatePlayers={rotatePlayers} setPlayers={setPlayers}/>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragEnd={handleDragEnd}
-      >
+      <settingsContext.Provider value={ {settings, setSettings} }>
+        <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle} rotatePlayers={rotatePlayers} setPlayers={setPlayers}/>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragEnd={handleDragEnd}
+        >
 
-        <QuickBasketballPlayerList players={players} addPlayer={addPlayer} removePlayer={removePlayer}/>
-      </DndContext>
+          <QuickBasketballPlayerList players={players} addPlayer={addPlayer} removePlayer={removePlayer}/>
+        </DndContext>
+      </settingsContext.Provider>
     </div>
   );
 }

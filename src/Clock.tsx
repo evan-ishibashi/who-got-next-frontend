@@ -5,23 +5,26 @@
  * - players like [{listing},...]
  */
 
-const GAMETIME = 7;
-const RESTTIME = 1
 const CONVERT2SECONDS = 60;
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
+import { settingsContext } from './QuickBasketballPage';
 import hornSound from './audio/buzzer/horn.mp3'
 // @ts-ignore
 import useSound from 'use-sound';
 
 const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gameLive:boolean, setGameLive:Function, toggleGameHasStarted:Function, resetAllScore:Function}) => {
-    const [time, setTime] = useState<number>(GAMETIME * CONVERT2SECONDS); // Initial time in seconds
-    const [isActive, setIsActive] = useState<boolean>(false);
-    const [localGame, setLocalGame] = useState<boolean>(false);
-    const [isFirstMount, setIsFirstMount] = useState<boolean>(true);
-    const [endTime, setEndTime] = useState<Date | null>(null);
-    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-    const buzzerSound = new Audio(hornSound)
+    const config = useContext(settingsContext); // use Context, which grabs settings
+    const gameTimeInSecs = ((config?.settings.gameClockMins! * CONVERT2SECONDS) + config?.settings.gameClockSecs!);
+    const restTimeInSecs = ((config?.settings.restClockMins! * CONVERT2SECONDS) + config?.settings.restClockSecs!);
+
+    const [time, setTime] = useState<number>(gameTimeInSecs); // Initial time in seconds
+    const [isActive, setIsActive] = useState<boolean>(false); // Is the clock active
+    const [localGame, setLocalGame] = useState<boolean>(false); // Is the game within Clock component on gametime or rest
+    const [isFirstMount, setIsFirstMount] = useState<boolean>(true); // handles first time mounting
+    const [endTime, setEndTime] = useState<Date | null>(null); // end time, relative to now
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null); // set interval for timer
+    const buzzerSound = new Audio(hornSound) // end of game buzzer
 
 
 
@@ -46,20 +49,17 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
                     setIsActive(false);
                     if (gameLive) {
                         buzzerSound.play();
-                        console.log("first option triggered gameLive TRUE")
-                        console.log(RESTTIME * CONVERT2SECONDS)
-                        setTime(RESTTIME * CONVERT2SECONDS);
+                        setTime(restTimeInSecs);
                         console.log(time)
                         setLocalGame(false);
                     } else {
                         (console.log("second option triggered gameLive FALSE"))
-                        setTime(GAMETIME * CONVERT2SECONDS);
+                        setTime(gameTimeInSecs);
                         toggleGameHasStarted(false);
                         setLocalGame(true);
                     }
                     setGameLive();
                     console.log(time)
-                    // startTimer();
                 }
             };
             clearInterval(timerRef.current!);
@@ -73,6 +73,8 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         return () => clearInterval(timerRef.current!);
     }, [isActive, endTime]);
 
+
+    // Handles When End game, or end break button is pressed
     useEffect(()=>{
         console.log('gameLive in 2ns Use effect', gameLive)
         console.log('isActive in 2nd Use Effect', isActive)
@@ -81,7 +83,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
             clearInterval(timerRef.current!);
             setIsActive(false);
             toggleGameHasStarted(false);
-            setTime(RESTTIME * CONVERT2SECONDS);
+            setTime(restTimeInSecs);
             setEndTime(null);
             setLocalGame(!localGame)
         }
@@ -90,7 +92,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
             clearInterval(timerRef.current!);
             setIsActive(false);
             toggleGameHasStarted(false);
-            setTime(GAMETIME * CONVERT2SECONDS);
+            setTime(gameTimeInSecs);
             setEndTime(null);
             setLocalGame(localGame)
             // startTimer();
@@ -127,7 +129,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         setIsActive(false);
         toggleGameHasStarted(false);
         resetAllScore();
-        setTime(GAMETIME * CONVERT2SECONDS); // Reset to initial time
+        setTime(gameTimeInSecs); // Reset to initial time
         setEndTime(null);
     };
 

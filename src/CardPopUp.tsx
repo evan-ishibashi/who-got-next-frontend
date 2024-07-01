@@ -1,5 +1,5 @@
 
-import Player from './types.tsx'
+import {Player} from './types.tsx'
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { useState } from "react";
