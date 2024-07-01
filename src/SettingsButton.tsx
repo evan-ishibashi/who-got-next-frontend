@@ -52,22 +52,22 @@ const SettingsButton = () => {
             <div className="modal">
 
                 <form onSubmit={handleSubmit}>
-                    <input id="teamSize" name="teamSize" className="w-10 outline-1"  onChange={handleChange} value={`${formData.teamSize}`} />
+                    <input id="teamSize" name="teamSize" className="w-10"  onChange={handleChange} value={`${formData.teamSize}`} />
                     <label htmlFor="teamSize">{"Players Per Team (1-20)"}</label>
                     <br />
-                    <input id="gameClockMins" name="gameClockMins" onChange={handleChange} value={`${formData.gameClockMins}`} />
+                    <input id="gameClockMins" name="gameClockMins" className="w-10" onChange={handleChange} value={`${formData.gameClockMins}`} />
                     <label htmlFor="gameClockMins">{"Game Clock Minutes (0 - 99)"}</label>
                     <br />
-                    <input id="gameClockSecs" name="gameClockSecs" onChange={handleChange} value={formData.gameClockSecs} />
+                    <input id="gameClockSecs" disabled name="gameClockSecs" className="w-10" onChange={handleChange} value={formData.gameClockSecs} />
                     <label htmlFor="gameClockSecs">{"Game Clock Seconds (0 - 59)"}</label>
                     <br />
-                    <input id="restClockMins" name="restClockMins" onChange={handleChange} value={`${formData.restClockMins}`} />
+                    <input id="restClockMins" name="restClockMins" className="w-10" onChange={handleChange} value={`${formData.restClockMins}`} />
                     <label htmlFor="restClockMins">{"Rest Clock Minutes (0 - 99)"}</label>
                     <br />
-                    <input id="restClockSecs" name="restClockSecs" onChange={handleChange} value={formData.restClockSecs} />
+                    <input id="restClockSecs" disabled name="restClockSecs" className="w-10" onChange={handleChange} value={formData.restClockSecs} />
                     <label htmlFor="restSecs">{"Rest Clock Seconds (0 - 59)"}</label>
                     <br />
-                    <input id="winningScore" name="winningScore" onChange={handleChange} value={formData.winningScore} />
+                    <input id="winningScore" name="winningScore" className="w-10" onChange={handleChange} value={formData.winningScore} />
                     <label htmlFor="winningScore">{"Score Needed to Win (0-59)"}</label>
                     <br />
                     <select id="winningScore" name="teamRotation" value={formData.teamRotation} onChange={handleChange}>
