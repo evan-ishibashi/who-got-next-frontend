@@ -5,7 +5,8 @@ type Player = {
     name: string,
     winCount:number,
     lossCount:number,
-    tieCount:number
+    tieCount:number,
+    firstGame:boolean,
 }
 
 type Settings = {

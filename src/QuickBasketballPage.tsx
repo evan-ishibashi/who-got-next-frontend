@@ -52,8 +52,8 @@ function QuickBasketballPage() {
     if (name.toLowerCase() === 'allen') allen.play();
 
     if(idx === players.length) {
-      localStorage.setItem('players', JSON.stringify([...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0}]))
-      setPlayers((players) => [...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0}]);
+      localStorage.setItem('players', JSON.stringify([...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0, firstGame:true}]))
+      setPlayers((players) => [...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0, firstGame:true}]);
       localStorage.setItem('playerId', JSON.stringify(playerId +1));
       setPlayerId((playerId) => playerId +1);
 
@@ -61,7 +61,7 @@ function QuickBasketballPage() {
       setPlayers(function (players) {
 
         let playerList =[...players];
-        playerList.splice(idx, 0, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0});
+        playerList.splice(idx, 0, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0, firstGame:true});
         localStorage.setItem('players', JSON.stringify(playerList))
         setPlayerId((playerId) => playerId +1);
 
@@ -105,6 +105,7 @@ function QuickBasketballPage() {
       let playerList =[...players];
       //Handles Team One and two Record Update
       for (let i = 0; i < settings.teamSize * 2; i++) {
+        if(playerList[i]['firstGame']) playerList[i]['firstGame'] = false;
         if (i < settings.teamSize) {
             switch (teamOne) {
                 case "tie":
