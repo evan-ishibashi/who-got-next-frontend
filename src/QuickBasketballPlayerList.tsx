@@ -12,7 +12,7 @@ import { settingsContext } from "./QuickBasketballPage.tsx";
  * - players like [{listing},...]
  */
 
-function QuickBasketballPlayerList({ players, addPlayer, removePlayer }: { players: Player[], addPlayer:(name:string,idx:number)=> void, removePlayer:Function }) {
+function QuickBasketballPlayerList({ players, addPlayer, removePlayer, editPlayer }: { players: Player[], addPlayer:(name:string,idx:number)=> void, removePlayer:Function, editPlayer:Function }) {
   const config = useContext(settingsContext);
   const teamSize = config?.settings.teamSize!;
 
@@ -29,6 +29,7 @@ function QuickBasketballPlayerList({ players, addPlayer, removePlayer }: { playe
               player={player}
               addPlayer={addPlayer}
               removePlayer={removePlayer}
+              editPlayer={editPlayer}
               color={(idx % (teamSize * 2)) > (teamSize - 1)  ? 'bg-orange-200' : 'bg-white'}
               />
         ))}

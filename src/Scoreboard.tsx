@@ -12,9 +12,11 @@ import { settingsContext } from "./QuickBasketballPage.tsx";
  *
  * Props:
  * - players like [{listing},...]
+ *
+ *
  */
 
-function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotatePlayers, setPlayers }: {teamOne:Player[], teamTwo:Player[],teamNext:Player[], gameLive:boolean, setGameLive:Function, rotatePlayers:Function, setPlayers:Function }) {
+function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotatePlayers, setPlayers, updatePlayerRecord }: {teamOne:Player[], teamTwo:Player[],teamNext:Player[], gameLive:boolean, setGameLive:Function, rotatePlayers:Function, setPlayers:Function, updatePlayerRecord:Function }) {
     const config = useContext(settingsContext);
     const winningScore = config?.settings.winningScore!;
     const teamRotationSetting = config?.settings.teamRotation!;
@@ -28,7 +30,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
     const [teamTwoLabel, setTeamTwoLabel] = useState<String>("Away");
     const [teamOneWins, setTeamOneWins] = useState<boolean>(false);
 
-    const isTied = teamOneScore === teamTwoScore ? true : false;
+    let isTied = teamOneScore === teamTwoScore ? true : false;
 
     useEffect(()=>{
         if (teamOneScore >= winningScore){
@@ -47,6 +49,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
 
     },[teamOneScore,teamTwoScore]);
 
+    //handles when game switches from live to off.
     useEffect(()=>{
 
         if(gameLive){
@@ -57,6 +60,13 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
         if(!gameLive && !isFirstMount){
             teamStatusBreak();
             setFullDisplay(false);
+            if(isTied){
+                console.log("THE EVIL USE EFFECT RAN")
+                updatePlayerRecord('tie','tie');
+            } else {
+                if(teamOneWins) updatePlayerRecord('win','loss');
+                if(!teamOneWins) updatePlayerRecord('loss','win');
+            }
         }
         setIsFirstMount(false)
 

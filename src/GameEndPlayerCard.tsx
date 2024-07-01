@@ -13,7 +13,7 @@ import 'reactjs-popup/dist/index.css';
  *
  * RoutesList -> BasketballPage -> ListingsList -> ListingCard -> Badge
  */
-function GameEndPlayerCard({ player }: {player: Player}) {
+function GameEndPlayerCard({ player, displayRecord }: {player: Player, displayRecord:boolean}) {
 
 
   return (
@@ -22,9 +22,11 @@ function GameEndPlayerCard({ player }: {player: Player}) {
         <div className="text-3xl">
             {player.name}
         </div>
-        {/* <div className="text-small pl-2">
-            w: {player.winCount}
-        </div> */}
+        { displayRecord &&
+          <div className="text-small pl-10 pt-2 justify-self-end">
+            W: {player.winCount/2} L: {player.lossCount/2} T: {player.tieCount/2}
+        </div>
+        }
     </div>
   );
 }

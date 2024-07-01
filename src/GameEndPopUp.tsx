@@ -32,6 +32,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
   useEffect(() => {
     if (!gameLive && !isFirstMount) {
       clearInterval(timerRef.current!);
+      // add in record change here
 
       if (teamRotationSetting === 'playTwo') {
         setCheckBoxOne(false);
@@ -119,7 +120,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
               {
                 teamOne.map((player: Player, idx) => (
 
-                  <GameEndPlayerCard key={idx} player={player} />
+                  <GameEndPlayerCard key={idx} player={player} displayRecord={false}/>
 
                 ))}
 
@@ -134,7 +135,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
               </h1>
               {
                 teamTwo.map((player: Player, idx) => (
-                  <GameEndPlayerCard key={idx} player={player} />
+                  <GameEndPlayerCard key={idx} player={player} displayRecord={false}/>
                 ))}
               <div className='mt-2'>
                 <input type="checkbox" checked={checkBoxTwo} onChange={handleCheckBoxTwo} className='w-6 h-6 ml-6' />
@@ -146,7 +147,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
             <h1 className='text-4xl bg-yellow-300'>Up Next</h1>
             {
               teamNext.map((player: Player, idx) => (
-                <GameEndPlayerCard key={idx} player={player} />
+                <GameEndPlayerCard key={idx} player={player} displayRecord={true}/>
               ))}
 
           </div>

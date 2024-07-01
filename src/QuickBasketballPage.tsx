@@ -34,8 +34,10 @@ function QuickBasketballPage() {
   useEffect(function setLocalStorage(): void {
     let players = localStorage.getItem('players');
     let playerId = localStorage.getItem('playerId');
+    let quickBballSettings = localStorage.getItem('quickBballSettings');
     if (players) setPlayers(JSON.parse(players));
     if (playerId) setPlayerId(JSON.parse(playerId));
+    if (quickBballSettings) setPlayerId(JSON.parse(quickBballSettings));
 
   }, []);
 
@@ -46,7 +48,7 @@ function QuickBasketballPage() {
 
 
   //Add Player to List
-  const addPlayer = (name:String, idx:number) => {
+  const addPlayer = (name:string, idx:number) => {
     if (name.toLowerCase() === 'allen') allen.play();
 
     if(idx === players.length) {
@@ -81,6 +83,65 @@ function QuickBasketballPage() {
       }
     );
   }
+
+  //Edit Player name
+  const editPlayerName = (name:string, idx:number) => {
+    setPlayers(function (players) {
+
+      let playerList =[...players];
+      playerList[idx]['name'] = name;
+      localStorage.setItem('players', JSON.stringify(playerList))
+
+      return playerList;
+      }
+    );
+  }
+
+  //Edit Player name
+  const updatePlayerRecord = (teamOne:string, teamTwo:string) => {
+    console.log("UPDATE PLAYER RECORD RAN")
+    setPlayers(function (players) {
+      console.log("UPDATE PLAYER RECORD INSIDE RAN")
+      let playerList =[...players];
+      //Handles Team One and two Record Update
+      for (let i = 0; i < settings.teamSize * 2; i++) {
+        if (i < settings.teamSize) {
+            switch (teamOne) {
+                case "tie":
+                    playerList[i]['tieCount'] += 1;
+                    break;
+                case "win":
+                    playerList[i]['winCount'] += 1;
+                    break;
+                case "loss":
+                    playerList[i]['lossCount'] += 1;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (teamTwo) {
+                case "tie":
+                    playerList[i]['tieCount'] += 1;
+                    break;
+                case "win":
+                    playerList[i]['winCount'] += 1;
+                    break;
+                case "loss":
+                    playerList[i]['lossCount'] += 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+      localStorage.setItem('players', JSON.stringify(playerList))
+
+      return playerList;
+      }
+    );
+  }
+
 
 // rotates Teams: input rotating Team === 'first', 'second', or 'both'
   const rotatePlayers = (rotatingTeam:string) => {
@@ -143,14 +204,14 @@ function QuickBasketballPage() {
 
     <div>
       <settingsContext.Provider value={ {settings, setSettings} }>
-        <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle} rotatePlayers={rotatePlayers} setPlayers={setPlayers}/>
+        <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle} rotatePlayers={rotatePlayers} setPlayers={setPlayers} updatePlayerRecord={updatePlayerRecord}/>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragEnd={handleDragEnd}
         >
 
-          <QuickBasketballPlayerList players={players} addPlayer={addPlayer} removePlayer={removePlayer}/>
+          <QuickBasketballPlayerList players={players} addPlayer={addPlayer} removePlayer={removePlayer} editPlayer={editPlayerName}/>
         </DndContext>
       </settingsContext.Provider>
     </div>

@@ -14,7 +14,7 @@ import CardPopUp from "./CardPopUp.tsx";
  *
  * RoutesList -> BasketballPage -> ListingsList -> ListingCard -> Badge
  */
-function QuickPlayerCard({ id, idx, player, addPlayer, removePlayer, color }: { id: UniqueIdentifier, idx:number, player: Player, addPlayer:(name:string,idx:number)=> void, removePlayer:Function, color:string }) {
+function QuickPlayerCard({ id, idx, player, addPlayer, removePlayer, editPlayer, color }: { id: UniqueIdentifier, idx:number, player: Player, addPlayer:(name:string,idx:number)=> void, removePlayer:Function, editPlayer:Function, color:string }) {
    const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id})
 
    const style = {
@@ -31,7 +31,7 @@ function QuickPlayerCard({ id, idx, player, addPlayer, removePlayer, color }: { 
     >
         <div className="pt-1 pl-1">
 
-         <CardPopUp player={player} addPlayer={addPlayer} removePlayer={removePlayer} idx={idx} />
+         <CardPopUp player={player} addPlayer={addPlayer} removePlayer={removePlayer} editPlayer={editPlayer} idx={idx} />
         </div>
         <div className="self-center flex flex-row text-bold text-3xl">
             {`${idx + 1}. `}{player.name}

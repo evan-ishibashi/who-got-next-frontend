@@ -14,8 +14,9 @@ import { contentStyle, overlayStyle} from './CardPopUpStyle.tsx'
  *
  * RoutesList -> QuickBasketballPage -> QuickBasketballPlayerList -> QuickPlayerCard -> CardPopUp
  */
-function CardPopUp({player, addPlayer, removePlayer, idx}: {player:Player, addPlayer:(name:string,idx:number)=> void, removePlayer:Function, idx:number}) {
+function CardPopUp({player, addPlayer, removePlayer, editPlayer, idx}: {player:Player, addPlayer:(name:string,idx:number)=> void, removePlayer:Function, editPlayer:Function, idx:number}) {
     const [input, setInput] = useState('');
+    const [editName, setEditName] = useState(player.name);
 
     const handleAddBefore = (evt:any) => {
         evt.preventDefault();
@@ -28,6 +29,12 @@ function CardPopUp({player, addPlayer, removePlayer, idx}: {player:Player, addPl
 
     const handleRemove = () => {
         removePlayer(idx)
+    }
+
+    const handleEdit = (e:any) => {
+        e.preventDefault();
+        if (!editName) return;
+        editPlayer(editName,idx)
     }
 
 
@@ -48,19 +55,34 @@ function CardPopUp({player, addPlayer, removePlayer, idx}: {player:Player, addPl
                 <div className="flex flex-col">
 
                     <div className="flex flex-row w-12">
-                    <input
-                        type="text"
-                        value={input}
-                        placeholder={`Add Before ${player.name}`}
-                        onChange={e => setInput(e.target.value)}
-                        className='mr-2 mt-1 bg-gray-50 border border-gray-300 rounded'
-                        />
-                    <button
-                        onClick={handleAddBefore}
-                        className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
-                        >
-                        Add
-                        </button>
+                        <input
+                            type="text"
+                            value={input}
+                            placeholder={`Add Before ${player.name}`}
+                            onChange={e => setInput(e.target.value)}
+                            className='mr-2 mt-1 bg-gray-50 border border-gray-300 rounded'
+                            />
+                        <button
+                            onClick={handleAddBefore}
+                            className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+                            >
+                            Add
+                            </button>
+                    </div>
+                    <div className="flex flex-row w-12">
+                        <input
+                            type="text"
+                            value={editName}
+                            placeholder={`Name Can't be blank`}
+                            onChange={e => setEditName(e.target.value)}
+                            className='mr-2 mt-1 bg-gray-50 border border-gray-300 rounded'
+                            />
+                        <button
+                            onClick={handleEdit}
+                            className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+                            >
+                            Edit
+                            </button>
                     </div>
                     <div className="flex flex-row justify-center mt-2">
                     <button
