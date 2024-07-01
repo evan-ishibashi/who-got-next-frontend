@@ -1,5 +1,5 @@
 
-import Player from './types.tsx'
+import {Player} from './types.tsx'
 
 import 'reactjs-popup/dist/index.css';
 
