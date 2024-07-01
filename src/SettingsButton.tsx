@@ -30,6 +30,7 @@ const SettingsButton = () => {
     function handleSubmit(e:any) {
         e.preventDefault();
         try {
+            localStorage.setItem('quickBballSettings', JSON.stringify(formData))
             setSettings(formData);
             closeModal();
 
@@ -52,25 +53,25 @@ const SettingsButton = () => {
             <div className="modal">
 
                 <form onSubmit={handleSubmit}>
-                    <input id="gameClockMins" name="gameClockMins" className="w-10" onChange={handleChange} value={`${formData.gameClockMins}`} />
+                    <input id="gameClockMins" name="gameClockMins" className="w-10" onChange={handleChange} value={`${currSettings.gameClockMins}`} />
                     <label htmlFor="gameClockMins">{"Game Clock Minutes (0 - 99)"}</label>
                     <br />
-                    <input id="gameClockSecs" disabled name="gameClockSecs" className="w-10" onChange={handleChange} value={formData.gameClockSecs} />
+                    <input id="gameClockSecs" disabled name="gameClockSecs" className="w-10" onChange={handleChange} value={currSettings.gameClockSecs} />
                     <label htmlFor="gameClockSecs">{"Game Clock Seconds (0 - 59)"}</label>
                     <br />
-                    <input id="restClockMins" name="restClockMins" className="w-10" onChange={handleChange} value={`${formData.restClockMins}`} />
+                    <input id="restClockMins" name="restClockMins" className="w-10" onChange={handleChange} value={`${currSettings.restClockMins}`} />
                     <label htmlFor="restClockMins">{"Rest Clock Minutes (0 - 99)"}</label>
                     <br />
-                    <input id="restClockSecs" disabled name="restClockSecs" className="w-10" onChange={handleChange} value={formData.restClockSecs} />
+                    <input id="restClockSecs" disabled name="restClockSecs" className="w-10" onChange={handleChange} value={currSettings.restClockSecs} />
                     <label htmlFor="restSecs">{"Rest Clock Seconds (0 - 59)"}</label>
                     <br />
-                    <input id="winningScore" name="winningScore" className="w-10" onChange={handleChange} value={formData.winningScore} />
+                    <input id="winningScore" name="winningScore" className="w-10" onChange={handleChange} value={currSettings.winningScore} />
                     <label htmlFor="winningScore">{"Score Needed to Win (0-59)"}</label>
                     <br />
-                    <input id="teamSize" name="teamSize" className="w-10"  onChange={handleChange} value={`${formData.teamSize}`} />
+                    <input id="teamSize" name="teamSize" className="w-10"  onChange={handleChange} value={`${currSettings.teamSize}`} />
                     <label htmlFor="teamSize">{"Players Per Team (1-20)"}</label>
                     <br />
-                    <select id="teamRotation" name="teamRotation" value={formData.teamRotation} onChange={handleChange}>
+                    <select id="teamRotation" name="teamRotation" value={currSettings.teamRotation} onChange={handleChange}>
                         <option value="winnerStays">Winner Stays On</option>
                         <option value="playTwo">Play Two and Off</option>
                         <option value="bothOff">Both Teams Off</option>

@@ -37,7 +37,7 @@ function QuickBasketballPage() {
     let quickBballSettings = localStorage.getItem('quickBballSettings');
     if (players) setPlayers(JSON.parse(players));
     if (playerId) setPlayerId(JSON.parse(playerId));
-    if (quickBballSettings) setPlayerId(JSON.parse(quickBballSettings));
+    if (quickBballSettings) setSettings(JSON.parse(quickBballSettings));
 
   }, []);
 
