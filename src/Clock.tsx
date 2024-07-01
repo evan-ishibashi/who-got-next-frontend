@@ -10,8 +10,6 @@ const CONVERT2SECONDS = 60;
 import { useState, useRef, useEffect, useContext } from 'react';
 import { settingsContext } from './QuickBasketballPage';
 import hornSound from './audio/buzzer/horn.mp3'
-// @ts-ignore
-import useSound from 'use-sound';
 
 const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gameLive:boolean, setGameLive:Function, toggleGameHasStarted:Function, resetAllScore:Function}) => {
     const config = useContext(settingsContext); // use Context, which grabs settings

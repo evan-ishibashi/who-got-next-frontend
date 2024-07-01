@@ -6,6 +6,7 @@ import { DEFAULT_SETTINGS } from './Utils';
 import { createContext } from "react";
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import ScoreBoard from './Scoreboard';
+import allenHello from './audio/personal/allenhello.mp3';
 
 
 /** BasketballQuickPage:
@@ -23,6 +24,7 @@ function QuickBasketballPage() {
   const [gameLive, setGameLive] = useState<boolean>(false);
   const [playerId, setPlayerId] = useState<number>(1);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+  const allen = new Audio(allenHello);
 
   let teamOne = players.slice(0,settings!.teamSize);
   let teamTwo = players.slice(settings!.teamSize, settings!.teamSize * 2);
@@ -45,6 +47,8 @@ function QuickBasketballPage() {
 
   //Add Player to List
   const addPlayer = (name:String, idx:number) => {
+    if (name.toLowerCase() === 'allen') allen.play();
+
     if(idx === players.length) {
       localStorage.setItem('players', JSON.stringify([...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0}]))
       setPlayers((players) => [...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0}]);
