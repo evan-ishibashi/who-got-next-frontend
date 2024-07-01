@@ -24,7 +24,7 @@ function GameEndPlayerCard({ player, displayRecord }: {player: Player, displayRe
         </div>
         { displayRecord &&
           <div className="text-small pl-10 pt-2 justify-self-end">
-            W: {player.winCount/2} L: {player.lossCount/2} T: {player.tieCount/2}
+            W: {player.winCount} L: {player.lossCount} T: {player.tieCount}
         </div>
         }
     </div>
