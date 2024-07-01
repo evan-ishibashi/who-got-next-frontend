@@ -52,9 +52,6 @@ const SettingsButton = () => {
             <div className="modal">
 
                 <form onSubmit={handleSubmit}>
-                    <input id="teamSize" name="teamSize" className="w-10"  onChange={handleChange} value={`${formData.teamSize}`} />
-                    <label htmlFor="teamSize">{"Players Per Team (1-20)"}</label>
-                    <br />
                     <input id="gameClockMins" name="gameClockMins" className="w-10" onChange={handleChange} value={`${formData.gameClockMins}`} />
                     <label htmlFor="gameClockMins">{"Game Clock Minutes (0 - 99)"}</label>
                     <br />
@@ -70,7 +67,10 @@ const SettingsButton = () => {
                     <input id="winningScore" name="winningScore" className="w-10" onChange={handleChange} value={formData.winningScore} />
                     <label htmlFor="winningScore">{"Score Needed to Win (0-59)"}</label>
                     <br />
-                    <select id="winningScore" name="teamRotation" value={formData.teamRotation} onChange={handleChange}>
+                    <input id="teamSize" name="teamSize" className="w-10"  onChange={handleChange} value={`${formData.teamSize}`} />
+                    <label htmlFor="teamSize">{"Players Per Team (1-20)"}</label>
+                    <br />
+                    <select id="teamRotation" name="teamRotation" value={formData.teamRotation} onChange={handleChange}>
                         <option value="winnerStays">Winner Stays On</option>
                         <option value="playTwo">Play Two and Off</option>
                         <option value="bothOff">Both Teams Off</option>
