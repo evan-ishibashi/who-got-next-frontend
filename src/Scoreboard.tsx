@@ -1,20 +1,24 @@
 import Clock from "./Clock.tsx";
 import TeamScore from "./TeamScore.tsx";
-import Player from "./types.tsx";
+import {Player} from "./types.tsx";
 import GameEndPopUp from './GameEndPopUp.tsx';
+import SettingsButton from './SettingsButton.tsx'
 
-import {useEffect, useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import TeamScoreNext from "./TeamScoreNext.tsx";
 import TeamScoreGameNotStarted from "./TeamScoreGameNotStarted.tsx";
+import { settingsContext } from "./QuickBasketballPage.tsx";
 /** QuickBasketballPlayerList: displays list of Players
  *
  * Props:
  * - players like [{listing},...]
  */
 
-const WINNINGSCORE = 15;
-
 function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotatePlayers, setPlayers }: {teamOne:Player[], teamTwo:Player[],teamNext:Player[], gameLive:boolean, setGameLive:Function, rotatePlayers:Function, setPlayers:Function }) {
+    const config = useContext(settingsContext);
+    const winningScore = config?.settings.winningScore!;
+    const teamRotationSetting = config?.settings.teamRotation!;
+
     const [teamOneScore, setTeamOneScore] = useState(0);
     const [teamTwoScore, setTeamTwoScore] = useState(0);
     const [isFirstMount, setIsFirstMount] = useState<boolean>(true);
@@ -24,27 +28,27 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
     const [teamTwoLabel, setTeamTwoLabel] = useState<String>("Away");
     const [teamOneWins, setTeamOneWins] = useState<boolean>(false);
 
-
-    let isTied = teamOneScore === teamTwoScore ? true : false;
+    const isTied = teamOneScore === teamTwoScore ? true : false;
 
     useEffect(()=>{
-        if (teamOneScore >= WINNINGSCORE){
+        if (teamOneScore >= winningScore){
             setGameLive(gameLive);
         }
-        if (teamTwoScore >= WINNINGSCORE){
+        if (teamTwoScore >= winningScore){
             setGameLive(gameLive);
+        }
+        // handles updating if teamOne Wins is true or not, before the game ends, so the pop-up component is correct.
+        if (teamTwoScore > teamOneScore) {
+            setTeamOneWins(false)
+        }
+        if (teamOneScore > teamTwoScore) {
+            setTeamOneWins(true)
         }
 
     },[teamOneScore,teamTwoScore]);
 
     useEffect(()=>{
-        if (teamOneScore > teamTwoScore){
-            setTeamOneWins(true);
 
-        }
-        if (teamOneScore < teamTwoScore){
-            setTeamOneWins(false);
-        }
         if(gameLive){
            resetAllScore();
            setFullDisplay(true);
@@ -64,8 +68,14 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
     }
 
     const teamStatusBreak = () => {
-        setTeamOneLabel("You're Playing Again:");
-        setTeamTwoLabel("You're On:");
+        if (teamRotationSetting === "bothOff"){
+            setTeamOneLabel("You're On:");
+            setTeamTwoLabel("You're On:");
+        }
+        else {
+            setTeamOneLabel("You're Playing Again:");
+            setTeamTwoLabel("You're On:");
+        }
     }
 
     const teamStatusLive = () => {
@@ -156,6 +166,9 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                     >
                         Reset Players
                 </button>
+                <div className="mt-2 pl-2">
+                    <SettingsButton />
+                </div>
                 <GameEndPopUp gameLive={gameLive} teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} teamOneWins={teamOneWins} isTied={isTied} rotatePlayers={rotatePlayers} resetAllScore={resetAllScore}/>
             </div>
         </>

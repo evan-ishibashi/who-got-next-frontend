@@ -8,7 +8,7 @@ const DEFAULT_SETTINGS:Settings = {
     restClockMins: 1,
     restClockSecs: 0,
     winningScore: 15,
-    teamRotation: 'playTwo',
+    teamRotation: 'playTwo', // playTwo or winnerStays or bothOff
 }
 
 export {DEFAULT_SETTINGS}

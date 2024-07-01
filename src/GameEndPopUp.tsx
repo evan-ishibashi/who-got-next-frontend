@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import Popup from 'reactjs-popup';
 import { Player } from './types';
 import GameEndPlayerCard from './GameEndPlayerCard';
 import { overlayStyle } from './GameEndPopUpStyle.tsx';
+import { settingsContext } from './QuickBasketballPage.tsx';
 
 //Settings
-const TEAMROTATIONSETTING: string = 'playTwo';
+// const TEAMROTATIONSETTING: string = 'playTwo';
 // const TEAMROTATIONSETTING:string = 'winnerStays';
 // const TEAMROTATIONSETTING = 'bothOff';
 
@@ -13,6 +14,9 @@ const TEAMROTATIONSETTING: string = 'playTwo';
 const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTied, rotatePlayers, resetAllScore }: { gameLive: boolean, teamOne: Player[], teamTwo: Player[], teamNext: Player[], teamOneWins: boolean, isTied: boolean, rotatePlayers: Function, resetAllScore: Function; }) => {
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
+
+  const config = useContext(settingsContext);
+  const teamRotationSetting = config?.settings.teamRotation!;
 
   const [checkBoxOne, setCheckBoxOne] = useState<boolean>(false);
   const [checkBoxTwo, setCheckBoxTwo] = useState<boolean>(false);
@@ -29,18 +33,23 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
     if (!gameLive && !isFirstMount) {
       clearInterval(timerRef.current!);
 
-      if (TEAMROTATIONSETTING === 'playTwo') {
+      if (teamRotationSetting === 'playTwo') {
         setCheckBoxOne(false);
         setCheckBoxTwo(true);
-      } else if (TEAMROTATIONSETTING === 'winnerStays') {
-        if (teamOneWins) {
+      } else if (teamRotationSetting === 'winnerStays') {
+        if (isTied) {
           setCheckBoxOne(true);
-          setCheckBoxTwo(false);
-        } else {
-          setCheckBoxOne(false);
           setCheckBoxTwo(true);
+        } else {
+          if (teamOneWins) {
+            setCheckBoxOne(true);
+            setCheckBoxTwo(false);
+          } else {
+            setCheckBoxOne(false);
+            setCheckBoxTwo(true);
+          }
         }
-      } else if (TEAMROTATIONSETTING === 'bothOff') {
+      } else if (teamRotationSetting === 'bothOff') {
         setCheckBoxOne(false);
         setCheckBoxTwo(false);
       }
@@ -115,7 +124,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
                 ))}
 
               <div className='mt-2'>
-                <input type="checkbox" checked={checkBoxOne} onChange={handleCheckBoxOne} className='w-4 h-4 ml-4' />
+                <input type="checkbox" checked={checkBoxOne} onChange={handleCheckBoxOne} className='w-6 h-6 ml-6' />
                 Home Team Stays?
               </div>
             </div>
@@ -128,7 +137,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
                   <GameEndPlayerCard key={idx} player={player} />
                 ))}
               <div className='mt-2'>
-                <input type="checkbox" checked={checkBoxTwo} onChange={handleCheckBoxTwo} className='w-4 h-4 ml-4' />
+                <input type="checkbox" checked={checkBoxTwo} onChange={handleCheckBoxTwo} className='w-6 h-6 ml-6' />
                 Away Team Stays?
               </div>
             </div>

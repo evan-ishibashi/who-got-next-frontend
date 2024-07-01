@@ -1,4 +1,4 @@
-import Player from './types.tsx'
+import {Player} from './types.tsx'
 import ScoreBoardName from './ScoreBoardName.tsx'
 /** TeamScoreNext: displays scoreboard
  *

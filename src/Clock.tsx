@@ -99,6 +99,14 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         }
     },[gameLive])
 
+    // Handles updating clock
+    useEffect(()=>{
+        if (gameLive) setTime(gameTimeInSecs);
+        if (!gameLive && !isFirstMount) setTime(restTimeInSecs);
+    },[config])
+
+
+
 
 
     const startTimer = () => {
