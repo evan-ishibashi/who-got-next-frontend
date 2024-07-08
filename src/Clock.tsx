@@ -161,7 +161,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
             <div hidden={!isFirstMount} className='text-small md:text-4xl'>
                 Welcome, Press Start
             </div>
-            <div className="text-xl md:text-8xl">{`${minutes}:${seconds > 9 ? seconds : '0' + seconds}`}</div>
+            <div className="text-xl md:text-9xl">{`${minutes}:${seconds > 9 ? seconds : '0' + seconds}`}</div>
             <div className="buttons">
                 { isActive ?
                     <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded ml-2 mr-2'onClick={pauseTimer}>Pause</button>

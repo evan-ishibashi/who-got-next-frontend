@@ -49,7 +49,7 @@ function QuickBasketballPage() {
 
   //Add Player to List
   const addPlayer = (name:string, idx:number) => {
-    if (name.toLowerCase() === 'allen') allen.play();
+    if (name.toLowerCase() === 'allen' || name.toLowerCase() === 'allen tsai') allen.play();
 
     if(idx === players.length) {
       localStorage.setItem('players', JSON.stringify([...players, {id:playerId, name:name, winCount:0, lossCount:0, tieCount:0, firstGame:true}]))
