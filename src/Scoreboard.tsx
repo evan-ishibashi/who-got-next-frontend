@@ -61,7 +61,6 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
             teamStatusBreak();
             setFullDisplay(false);
             if(isTied){
-                console.log("THE EVIL USE EFFECT RAN")
                 updatePlayerRecord('tie','tie');
             } else {
                 if(teamOneWins) updatePlayerRecord('win','loss');

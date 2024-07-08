@@ -99,7 +99,7 @@ function QuickBasketballPage() {
 
   //Edit Player name
   const updatePlayerRecord = (teamOne:string, teamTwo:string) => {
-    console.log("UPDATE PLAYER RECORD RAN")
+    if (players.length <= settings.teamSize * 2) return;
     setPlayers(function (players) {
       console.log("UPDATE PLAYER RECORD INSIDE RAN")
       let playerList =[...players];
