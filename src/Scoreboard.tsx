@@ -16,7 +16,7 @@ import { settingsContext } from "./QuickBasketballPage.tsx";
  *
  */
 
-function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotatePlayers, setPlayers, updatePlayerRecord }: {teamOne:Player[], teamTwo:Player[],teamNext:Player[], gameLive:boolean, setGameLive:Function, rotatePlayers:Function, setPlayers:Function, updatePlayerRecord:Function }) {
+function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotatePlayers, setPlayers, updatePlayerRecord, reverseRotatePlayers }: {teamOne:Player[], teamTwo:Player[],teamNext:Player[], gameLive:boolean, setGameLive:Function, rotatePlayers:Function, setPlayers:Function, updatePlayerRecord:Function, reverseRotatePlayers:Function }) {
     const config = useContext(settingsContext);
     const winningScore = config?.settings.winningScore!;
     const teamRotationSetting = config?.settings.teamRotation!;
@@ -105,7 +105,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
     }
 
     const toggleGameHasStarted = (bool:boolean) => {
-        setGameHasStarted(()=> bool)
+        setGameHasStarted(()=> bool);
     }
 
 
@@ -113,15 +113,19 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
         if(teamOneScore + value > 0) {
             setTeamOneScore(teamOneScore + value)
         } else {
-            setTeamOneScore(0)
+            setTeamOneScore(0);
         }
     }
     const updateT2Score = (value:number)=> {
         if(teamTwoScore + value > 0) {
             setTeamTwoScore(teamTwoScore + value)
         } else {
-            setTeamTwoScore(0)
+            setTeamTwoScore(0);
         }
+    }
+
+    const handleReverseRotatePlayers = () => {
+        reverseRotatePlayers();
     }
 
 
@@ -170,7 +174,14 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                         }
                 </button>
                 <button
-                    className={'bg-orange-500 hover:bg-orange-700 text-white font-bold px-4 rounded mt-2 mb-2'}
+                    className={`${gameHasStarted ? 'bg-gray-300 text-black' : 'bg-orange-500 hover:bg-orange-700 text-white font-bold'} px-4 rounded mt-2 mb-2 mr-1`}
+                    onClick={handleReverseRotatePlayers}
+                    disabled={gameHasStarted}
+                    >
+                        Undo Rotation
+                </button>
+                <button
+                    className={'bg-red-500 hover:bg-red-700 text-white font-bold px-4 rounded mt-2 mb-2'}
                     onClick={handleListReset}
                     >
                         Reset Players

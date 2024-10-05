@@ -171,6 +171,23 @@ function QuickBasketballPage() {
     }
   )
   }
+  const reverseRotatePlayers = () => {
+    if((settings.teamSize * 2) > players.length ) return;
+    console.log('Last Team Reversed');
+
+      setPlayers(function (players:Player[]) {
+
+      let playerList =[...players];
+      let finishedTeam = playerList.splice(-settings.teamSize, settings.teamSize);
+
+      let rotatedList = finishedTeam.concat(playerList);
+      localStorage.setItem('players', JSON.stringify(rotatedList))
+
+      return rotatedList;
+
+    }
+  )
+  }
 
   const getPlayerPos = (id:UniqueIdentifier) => players?.findIndex(player => player.id === id)
 
@@ -205,7 +222,7 @@ function QuickBasketballPage() {
 
     <div>
       <settingsContext.Provider value={ {settings, setSettings} }>
-        <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle} rotatePlayers={rotatePlayers} setPlayers={setPlayers} updatePlayerRecord={updatePlayerRecord}/>
+        <ScoreBoard teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} gameLive={gameLive} setGameLive={gameToggle} rotatePlayers={rotatePlayers} setPlayers={setPlayers} updatePlayerRecord={updatePlayerRecord} reverseRotatePlayers={reverseRotatePlayers}/>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
