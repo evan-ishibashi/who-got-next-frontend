@@ -4,7 +4,7 @@ import Errors from "../helperFunctions/Errors";
 import { REGISTER_INITIAL_FORM_DATA } from "../Utils";
 
 
-/** SignUpForm
+/** RegisterPage
  *
  * Props:
  *  - getToken()
@@ -15,7 +15,7 @@ import { REGISTER_INITIAL_FORM_DATA } from "../Utils";
  *
  * App -> RouterList -> SignUpForm -> Errors
  */
-function SignUpForm({ register }:{ register:Function }) {
+function RegisterPage({ register }:{ register:Function }) {
     const [formData, setFormData] = useState(REGISTER_INITIAL_FORM_DATA);
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
@@ -62,4 +62,4 @@ function SignUpForm({ register }:{ register:Function }) {
 
 }
 
-export default SignUpForm;
+export default RegisterPage;
