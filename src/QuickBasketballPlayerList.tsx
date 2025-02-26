@@ -15,10 +15,11 @@ import { settingsContext } from "./QuickBasketballPage.tsx";
 function QuickBasketballPlayerList({ players, addPlayer, removePlayer, editPlayer }: { players: Player[], addPlayer:(name:string,idx:number)=> void, removePlayer:Function, editPlayer:Function }) {
   const config = useContext(settingsContext);
   const teamSize = config?.settings.teamSize!;
+  const gridSize = players.length > 40 ? 'grid-cols-5' : 'grid-cols-4'
 
     return (
 
-      <div className={`grid-container grid-cols-1 justify-evenly grid-flow-col gap-2 md:grid  md:gap-2 md:grid-cols-4 md:grid-rows-10`}>
+      <div className={`grid-container grid-cols-1 justify-evenly grid-flow-col gap-2 md:grid  md:gap-2 md:${gridSize} md:grid-rows-10 auto-cols-fr`}>
         <SortableContext items = {players!} strategy={verticalListSortingStrategy}>
 
         {players?.map((player:Player, idx) => (
@@ -33,7 +34,7 @@ function QuickBasketballPlayerList({ players, addPlayer, removePlayer, editPlaye
               color={(idx % (teamSize * 2)) > (teamSize - 1)  ? 'bg-orange-200' : 'bg-white'}
               />
         ))}
-        {players.length < 40 &&
+        {players.length < 50 &&
 
             <QuickAddPlayer addPlayer={addPlayer} playersCount={players.length}/>
     }
