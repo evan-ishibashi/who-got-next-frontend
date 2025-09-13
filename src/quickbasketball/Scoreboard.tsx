@@ -362,16 +362,22 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                             <div className="font-bold mb-1">Hotkeys:</div>
                             <div>Space/Enter : Start/Pause Clock</div>
                             <div>/ : End Game/Break</div>
-                            <div>For Left Team Score:</div>
-                            <div>1 : +1</div>
-                            <div>2 : +2</div>
-                            <div>3 : +3</div>
-                            <div>4 : -1</div>
-                            <div>For Right Team Score:</div>
-                            <div>7 : +1</div>
-                            <div>8 : +2</div>
-                            <div>9 : +3</div>
-                            <div>6 : -1</div>
+                            <div className="flex justify-between mt-2">
+                                <div className="text-left mr-4">
+                                    <div className="font-semibold mb-1">Left Team:</div>
+                                    <div>1 : +1</div>
+                                    <div>2 : +2</div>
+                                    <div>3 : +3</div>
+                                    <div>4 : -1</div>
+                                </div>
+                                <div className="text-left">
+                                    <div className="font-semibold mb-1">Right Team:</div>
+                                    <div>7 : +1</div>
+                                    <div>8 : +2</div>
+                                    <div>9 : +3</div>
+                                    <div>6 : -1</div>
+                                </div>
+                            </div>
                         </div>
                         {/* Arrow pointing down */}
                         <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
