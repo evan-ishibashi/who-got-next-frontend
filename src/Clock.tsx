@@ -7,24 +7,59 @@
 
 const CONVERT2SECONDS = 60;
 
-import { useState, useRef, useEffect, useContext } from 'react';
+import { useState, useRef, useEffect, useContext, forwardRef, useImperativeHandle } from 'react';
 import { settingsContext } from './QuickBasketballPage';
 import hornSound from './audio/buzzer/horn.mp3'
 
-const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gameLive:boolean, setGameLive:Function, toggleGameHasStarted:Function, resetAllScore:Function}) => {
+const Clock = forwardRef(({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gameLive:boolean, setGameLive:Function, toggleGameHasStarted:Function, resetAllScore:Function}, ref) => {
     const config = useContext(settingsContext); // use Context, which grabs settings
-    const gameTimeInSecs = ((config?.settings.gameClockMins! * CONVERT2SECONDS) + config?.settings.gameClockSecs!);
-    const restTimeInSecs = ((config?.settings.restClockMins! * CONVERT2SECONDS) + config?.settings.restClockSecs!);
 
-    const [time, setTime] = useState<number>(gameTimeInSecs); // Initial time in seconds
+    // Calculate time values that update when config changes
+    const [gameTimeInSecs, setGameTimeInSecs] = useState<number>(0);
+    const [restTimeInSecs, setRestTimeInSecs] = useState<number>(0);
+
+    const [time, setTime] = useState<number>(0); // Initial time in seconds
     const [isActive, setIsActive] = useState<boolean>(false); // Is the clock active
     const [localGame, setLocalGame] = useState<boolean>(false); // Is the game within Clock component on gametime or rest
     const [isFirstMount, setIsFirstMount] = useState<boolean>(true); // handles first time mounting
     const [endTime, setEndTime] = useState<Date | null>(null); // end time, relative to now
+    const [showZeroTime, setShowZeroTime] = useState<boolean>(false); // show 0:00 in red when timer hits zero
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null); // set interval for timer
     const buzzerSound = new Audio(hornSound) // end of game buzzer
 
+    // Calculate time values when config changes
+    useEffect(() => {
+        if (config?.settings) {
+            // Ensure values are numbers, not strings
+            const gameMins = Number(config.settings.gameClockMins) || 0;
+            const gameSecs = Number(config.settings.gameClockSecs) || 0;
+            const restMins = Number(config.settings.restClockMins) || 0;
+            const restSecs = Number(config.settings.restClockSecs) || 0;
 
+            const gameTime = (gameMins * CONVERT2SECONDS) + gameSecs;
+            const restTime = (restMins * CONVERT2SECONDS) + restSecs;
+
+            console.log('Clock calculation:', {
+                gameMins, gameSecs, gameTime,
+                restMins, restSecs, restTime,
+                originalSettings: config.settings
+            });
+
+            setGameTimeInSecs(gameTime);
+            setRestTimeInSecs(restTime);
+        }
+    }, [config]);
+
+    // Expose methods to parent component via ref
+    useImperativeHandle(ref, () => ({
+        toggleTimer: () => {
+            if (isActive) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+    }));
 
     useEffect(() => {
         if (timerRef.current) {
@@ -45,6 +80,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
                     console.log('gameLive is', gameLive);
                     clearInterval(timerRef.current!);
                     setIsActive(false);
+                    setShowZeroTime(true); // Show 0:00 in red
                     if (gameLive) {
                         buzzerSound.play();
                         setTime(restTimeInSecs);
@@ -102,7 +138,14 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         if (isFirstMount) setTime(gameTimeInSecs)
         if (gameLive && !isActive) setTime(gameTimeInSecs);
         if (!gameLive && !isFirstMount) setTime(restTimeInSecs);
-    },[config])
+    },[config, gameTimeInSecs, restTimeInSecs, gameLive, isActive, isFirstMount])
+
+    // Reset showZeroTime when time changes (clock restarted)
+    useEffect(() => {
+        if (time > 0) {
+            setShowZeroTime(false);
+        }
+    }, [time]);
 
 
 
@@ -121,6 +164,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         const now = new Date().getTime();
         const end = new Date(now + time * 1000);
         setIsActive(true);
+        setShowZeroTime(false); // Reset zero time display when starting
 
         toggleGameHasStarted(true);
         setEndTime(end);
@@ -138,6 +182,7 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
         resetAllScore();
         setTime(gameTimeInSecs); // Reset to initial time
         setEndTime(null);
+        setShowZeroTime(false); // Reset zero time display
     };
 
 
@@ -161,7 +206,9 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
             <div hidden={!isFirstMount} className='text-small md:text-4xl'>
                 Welcome, Press Start
             </div>
-            <div className="text-xl md:text-9xl">{`${minutes}:${seconds > 9 ? seconds : '0' + seconds}`}</div>
+            <div className={`text-xl md:text-9xl ${showZeroTime ? 'text-red-500' : ''}`}>
+                {showZeroTime ? '0:00' : `${minutes}:${seconds > 9 ? seconds : '0' + seconds}`}
+            </div>
             <div className="buttons">
                 { isActive ?
                     <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded ml-2 mr-2'onClick={pauseTimer}>Pause</button>
@@ -175,6 +222,6 @@ const Clock = ({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gam
             </div>
         </div>
     );
-};
+});
 
 export default Clock;

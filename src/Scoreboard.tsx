@@ -4,7 +4,7 @@ import {Player} from "./types.tsx";
 import GameEndPopUp from './GameEndPopUp.tsx';
 import SettingsButton from './SettingsButton.tsx'
 
-import {useContext, useEffect, useState} from 'react'
+import {useContext, useEffect, useState, useRef} from 'react'
 import TeamScoreNext from "./TeamScoreNext.tsx";
 import TeamScoreGameNotStarted from "./TeamScoreGameNotStarted.tsx";
 import { settingsContext } from "./QuickBasketballPage.tsx";
@@ -30,6 +30,9 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
     const [teamTwoLabel, setTeamTwoLabel] = useState<String>("Away");
     const [teamOneWins, setTeamOneWins] = useState<boolean>(false);
     const [teamsSwapped, setTeamsSwapped] = useState<boolean>(true);
+
+    // Ref to access clock component methods
+    const clockRef = useRef<any>(null);
 
     let isTied = teamOneScore === teamTwoScore ? true : false;
 
@@ -71,6 +74,113 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
         setIsFirstMount(false)
 
     },[gameLive]);
+
+    // Hot key functionality
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            // Check if focus is in any form input (input, textarea, select, or contenteditable)
+            const activeElement = document.activeElement;
+            const isFormElement = activeElement && (
+                activeElement.tagName === 'INPUT' ||
+                activeElement.tagName === 'TEXTAREA' ||
+                activeElement.tagName === 'SELECT' ||
+                activeElement.getAttribute('contenteditable') === 'true'
+            );
+
+            // Only handle hot keys if not focused on form elements
+            if (!isFormElement) {
+                switch (event.key) {
+                    case ' ':
+                        // Spacebar to start/pause
+                        event.preventDefault();
+                        if (clockRef.current) {
+                            clockRef.current.toggleTimer();
+                        }
+                        break;
+                    case '1':
+                        // Plus 1 for left team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamTwoScore(prev => Math.max(0, prev + 1));
+                        } else {
+                            setTeamOneScore(prev => Math.max(0, prev + 1));
+                        }
+                        break;
+                    case '2':
+                        // Plus 2 for left team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamTwoScore(prev => Math.max(0, prev + 2));
+                        } else {
+                            setTeamOneScore(prev => Math.max(0, prev + 2));
+                        }
+                        break;
+                    case '3':
+                        // Plus 3 for left team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamTwoScore(prev => Math.max(0, prev + 3));
+                        } else {
+                            setTeamOneScore(prev => Math.max(0, prev + 3));
+                        }
+                        break;
+                    case '4':
+                        // Minus 1 for left team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamTwoScore(prev => Math.max(0, prev - 1));
+                        } else {
+                            setTeamOneScore(prev => Math.max(0, prev - 1));
+                        }
+                        break;
+                    case '5':
+                        // Plus 1 for right team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamOneScore(prev => Math.max(0, prev + 1));
+                        } else {
+                            setTeamTwoScore(prev => Math.max(0, prev + 1));
+                        }
+                        break;
+                    case '6':
+                        // Plus 2 for right team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamOneScore(prev => Math.max(0, prev + 2));
+                        } else {
+                            setTeamTwoScore(prev => Math.max(0, prev + 2));
+                        }
+                        break;
+                    case '7':
+                        // Plus 3 for right team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamOneScore(prev => Math.max(0, prev + 3));
+                        } else {
+                            setTeamTwoScore(prev => Math.max(0, prev + 3));
+                        }
+                        break;
+                    case '8':
+                        // Minus 1 for right team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamOneScore(prev => Math.max(0, prev - 1));
+                        } else {
+                            setTeamTwoScore(prev => Math.max(0, prev - 1));
+                        }
+                        break;
+                }
+            }
+        };
+
+        // Add event listener
+        document.addEventListener('keydown', handleKeyPress);
+
+        // Cleanup
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [teamsSwapped]); // Only teamsSwapped is needed since we use functional state updates
 
     const resetAllScore = () => {
         setTeamOneScore(0);
@@ -155,7 +265,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                                 :
                                 <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
                             }
-                            <Clock gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
+                            <Clock ref={clockRef} gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
                             {
                                 fullDisplay
                                 ?
@@ -182,7 +292,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                                 :
                                 <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
                             }
-                            <Clock gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
+                            <Clock ref={clockRef} gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
                             {
                                 fullDisplay
                                 ?
@@ -233,7 +343,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                 <div className="mt-2 pl-2">
                     <SettingsButton />
                 </div>
-                <GameEndPopUp gameLive={gameLive} teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} teamOneWins={teamOneWins} isTied={isTied} rotatePlayers={rotatePlayers} resetAllScore={resetAllScore}/>
+                <GameEndPopUp gameLive={gameLive} teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} teamOneWins={teamOneWins} isTied={isTied} rotatePlayers={rotatePlayers} resetAllScore={resetAllScore} teamsSwapped={teamsSwapped}/>
             </div>
         </>
 

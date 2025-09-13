@@ -11,7 +11,7 @@ import { settingsContext } from './QuickBasketballPage.tsx';
 // const TEAMROTATIONSETTING = 'bothOff';
 
 
-const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTied, rotatePlayers, resetAllScore }: { gameLive: boolean, teamOne: Player[], teamTwo: Player[], teamNext: Player[], teamOneWins: boolean, isTied: boolean, rotatePlayers: Function, resetAllScore: Function; }) => {
+const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTied, rotatePlayers, resetAllScore, teamsSwapped }: { gameLive: boolean, teamOne: Player[], teamTwo: Player[], teamNext: Player[], teamOneWins: boolean, isTied: boolean, rotatePlayers: Function, resetAllScore: Function, teamsSwapped: boolean }) => {
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
 
@@ -113,35 +113,67 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
         </a>
         <div className='flex flex-col'>
           <div className='grid grid-flow-row grid-cols-2 grid-row-1'>
-            <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-green-300' : 'bg-red-300'}`}>
-              <h1 className='text-4xl bg-gray-200'>
-                {isTied ? 'You Tied' : teamOneWins ? "Winning Team" : "Losing Team"}
-              </h1>
-              {
-                teamOne.map((player: Player, idx) => (
-
-                  <GameEndPlayerCard key={idx} player={player} displayRecord={false}/>
-
-                ))}
-
-              <div className='mt-2'>
-                <input type="checkbox" checked={checkBoxOne} onChange={handleCheckBoxOne} className='w-6 h-6 ml-6' />
-                Home Team Stays?
-              </div>
-            </div>
-            <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-red-300' : 'bg-green-300'}`}>
-              <h1 className='text-4xl bg-gray-200'>
-                {isTied ? 'You Tied' : teamOneWins ? "Losing Team" : "Winning Team"}
-              </h1>
-              {
-                teamTwo.map((player: Player, idx) => (
-                  <GameEndPlayerCard key={idx} player={player} displayRecord={false}/>
-                ))}
-              <div className='mt-2'>
-                <input type="checkbox" checked={checkBoxTwo} onChange={handleCheckBoxTwo} className='w-6 h-6 ml-6' />
-                Away Team Stays?
-              </div>
-            </div>
+            {teamsSwapped ? (
+              // When teams are swapped: teamTwo on left, teamOne on right
+              <>
+                <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-red-300' : 'bg-green-300'}`}>
+                  <h1 className='text-4xl bg-gray-200'>
+                    {isTied ? 'You Tied' : teamOneWins ? "Losing Team" : "Winning Team"}
+                  </h1>
+                  {
+                    teamTwo.map((player: Player, idx) => (
+                      <GameEndPlayerCard key={idx} player={player} displayRecord={false}/>
+                    ))}
+                  <div className='mt-2'>
+                    <input type="checkbox" checked={checkBoxTwo} onChange={handleCheckBoxTwo} className='w-6 h-6 ml-6' />
+                    Away Team Stays?
+                  </div>
+                </div>
+                <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-green-300' : 'bg-red-300'}`}>
+                  <h1 className='text-4xl bg-gray-200'>
+                    {isTied ? 'You Tied' : teamOneWins ? "Winning Team" : "Losing Team"}
+                  </h1>
+                  {
+                    teamOne.map((player: Player, idx) => (
+                      <GameEndPlayerCard key={idx} player={player} displayRecord={false}/>
+                    ))}
+                  <div className='mt-2'>
+                    <input type="checkbox" checked={checkBoxOne} onChange={handleCheckBoxOne} className='w-6 h-6 ml-6' />
+                    Home Team Stays?
+                  </div>
+                </div>
+              </>
+            ) : (
+              // Default layout: teamOne on left, teamTwo on right
+              <>
+                <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-green-300' : 'bg-red-300'}`}>
+                  <h1 className='text-4xl bg-gray-200'>
+                    {isTied ? 'You Tied' : teamOneWins ? "Winning Team" : "Losing Team"}
+                  </h1>
+                  {
+                    teamOne.map((player: Player, idx) => (
+                      <GameEndPlayerCard key={idx} player={player} displayRecord={false}/>
+                    ))}
+                  <div className='mt-2'>
+                    <input type="checkbox" checked={checkBoxOne} onChange={handleCheckBoxOne} className='w-6 h-6 ml-6' />
+                    Home Team Stays?
+                  </div>
+                </div>
+                <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-red-300' : 'bg-green-300'}`}>
+                  <h1 className='text-4xl bg-gray-200'>
+                    {isTied ? 'You Tied' : teamOneWins ? "Losing Team" : "Winning Team"}
+                  </h1>
+                  {
+                    teamTwo.map((player: Player, idx) => (
+                      <GameEndPlayerCard key={idx} player={player} displayRecord={false}/>
+                    ))}
+                  <div className='mt-2'>
+                    <input type="checkbox" checked={checkBoxTwo} onChange={handleCheckBoxTwo} className='w-6 h-6 ml-6' />
+                    Away Team Stays?
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className='text-center bg-white'>
             <h1 className='text-4xl bg-yellow-300'>Up Next</h1>
