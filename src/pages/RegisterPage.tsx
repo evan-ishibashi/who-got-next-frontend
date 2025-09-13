@@ -10,7 +10,7 @@ import { REGISTER_INITIAL_FORM_DATA } from "../Utils";
  *  - getToken()
  *
  * State:
- *  - formData: can look like { username, password, firstName, lastName, email}
+ *  - formData: can look like { username, password, firstName, lastName, email, photoUrl}
  *  - errors: [errormessages]
  *
  * App -> RouterList -> SignUpForm -> Errors
@@ -54,6 +54,8 @@ function RegisterPage({ register }:{ register:Function }) {
             <input id="lastName" name="lastName" onChange={handleChange} value={formData.lastName} /><br />
             <label htmlFor="email">Email</label>
             <input id="email" name="email" type="email" onChange={handleChange} value={formData.email} /><br />
+            <label htmlFor="photoUrl">Photo URL</label>
+            <input id="photoUrl" name="photoUrl" type="photoUrl" onChange={handleChange} value={formData.photoUrl} /><br />
             <button type="submit">Submit</button>
             {errors.length >= 1 && (<Errors messages={errors} />)}
         </form>

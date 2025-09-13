@@ -31,6 +31,7 @@ type registerPlayerFormData = {
     firstName:string,
     lastName:string,
     email:string,
+    photoUrl:string,
 }
 
 type loginFormData = {

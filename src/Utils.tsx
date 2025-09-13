@@ -13,7 +13,8 @@ const LOGIN_INITIAL_FORM_DATA = {
     password: "",
     firstName: "",
     lastName: "",
-    email: ""
+    email: "",
+    photoUrl: ""
   };
 
 // Default settings for quick basketball game, set to lighthouse rules.
