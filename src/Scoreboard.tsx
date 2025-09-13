@@ -91,7 +91,8 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
             if (!isFormElement) {
                 switch (event.key) {
                     case ' ':
-                        // Spacebar to start/pause
+                    case 'Enter':
+                        // Spacebar or Enter to start/pause
                         event.preventDefault();
                         if (clockRef.current) {
                             clockRef.current.toggleTimer();
@@ -133,7 +134,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                             setTeamOneScore(prev => Math.max(0, prev - 1));
                         }
                         break;
-                    case '5':
+                    case '7':
                         // Plus 1 for right team
                         event.preventDefault();
                         if (teamsSwapped) {
@@ -142,7 +143,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                             setTeamTwoScore(prev => Math.max(0, prev + 1));
                         }
                         break;
-                    case '6':
+                    case '8':
                         // Plus 2 for right team
                         event.preventDefault();
                         if (teamsSwapped) {
@@ -151,7 +152,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                             setTeamTwoScore(prev => Math.max(0, prev + 2));
                         }
                         break;
-                    case '7':
+                    case '9':
                         // Plus 3 for right team
                         event.preventDefault();
                         if (teamsSwapped) {
@@ -160,7 +161,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                             setTeamTwoScore(prev => Math.max(0, prev + 3));
                         }
                         break;
-                    case '8':
+                    case '6':
                         // Minus 1 for right team
                         event.preventDefault();
                         if (teamsSwapped) {
