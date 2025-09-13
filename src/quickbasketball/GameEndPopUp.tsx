@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import Popup from 'reactjs-popup';
 import { Player } from '../types';
 import GameEndPlayerCard from './GameEndPlayerCard';
-import { overlayStyle } from './GameEndPopUpStyle.tsx';
-import { settingsContext } from './QuickBasketballPage.tsx';
+import { overlayStyle } from './GameEndPopUpStyle';
+import { settingsContext } from './QuickBasketballPage';
 
 //Settings
 // const TEAMROTATIONSETTING: string = 'playTwo';

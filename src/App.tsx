@@ -2,11 +2,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { useState, useEffect} from 'react';
 import {jwtDecode} from "jwt-decode";
 import { UserContext } from "./UserContext.tsx";
+import { ToastProvider, useToast } from './contexts/ToastContext.tsx';
 import RoutesList from './RoutesList';
 import NavBar from './NavBar';
 import whoGotNextApi from './api.tsx'
 import './index.css'
-import { loginFormData, registerPlayerFormData } from './types.tsx';
+import { loginFormData, registerPlayerFormData, User } from './types.tsx';
 import ExtendedJwt from './interface.tsx';
 
 /** App: main app component
@@ -15,10 +16,11 @@ import ExtendedJwt from './interface.tsx';
  *     -> RoutesList
  */
 
-function App() {
+function AppContent() {
   const [token, setToken] = useState(localStorage.getItem("authToken") || "");
-    const [user, setUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { showToast } = useToast();
 
     useEffect(() => {
         if (token) {
@@ -56,6 +58,8 @@ function App() {
         localStorage.setItem("authToken", token);
         whoGotNextApi.token = token;
 
+        // Show success toast
+        showToast(`Welcome back, ${loginFormData.username}! 🏀`, 'success');
     }
 
     /** Gets JWT
@@ -72,14 +76,21 @@ function App() {
         // update whoGotNextApi.token
         localStorage.setItem("authToken", token);
         whoGotNextApi.token = token;
+
+        // Show success toast
+        showToast(`Welcome to Who Got Next, ${registerFormData.username}! 🏀`, 'success');
     }
 
     /**Logs Out Current User */
     function logout() {
+        const username = user?.username || 'User';
         setUser(null);
         setToken("");
         whoGotNextApi.token = "";
         localStorage.removeItem("authToken");
+
+        // Show success toast
+        showToast(`Goodbye, ${username}! Thanks for playing! 🏀`, 'success');
     }
 
     /**Updates User */
@@ -107,6 +118,14 @@ function App() {
       </BrowserRouter>
       </UserContext.Provider>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ToastProvider>
+      <AppContent />
+    </ToastProvider>
   );
 }
 

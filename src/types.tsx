@@ -43,6 +43,14 @@ type JwtPayload = {
     username:string,
 }
 
+type User = {
+    username: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    photoUrl?: string,
+}
+
 export type {
     Player,
     Settings,
@@ -50,4 +58,5 @@ export type {
     registerPlayerFormData,
     loginFormData,
     JwtPayload,
+    User,
 };
