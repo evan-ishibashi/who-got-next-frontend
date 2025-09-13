@@ -99,7 +99,7 @@ function App() {
     }
 
   return (
-    <div className='App bg-slate-200 mt-20'>
+    <div className='App bg-slate-200 pt-16'>
       <UserContext.Provider value={{ user }}>
       <BrowserRouter>
         <NavBar logout={logout}/>
