@@ -348,12 +348,12 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                     >
                         {teamsSwapped ? 'Swap Teams' : 'Swap Back'}
                 </button>
-                <div className="mt-2 pl-2">
+                <div className="mt-2 mb-2 mr-1">
                     <SettingsButton />
                 </div>
                 {/* Info Icon with Tooltip */}
-                <div className="relative group ml-2">
-                    <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold cursor-help mt-2">
+                <div className="relative group mt-2 mb-2 mr-1">
+                    <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold cursor-help">
                         i
                     </div>
                     {/* Tooltip */}
