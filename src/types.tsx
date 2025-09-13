@@ -25,4 +25,29 @@ type quickBasketballContext = {
     setSettings:Function
 }
 
-export type {Player, Settings, quickBasketballContext};
+type registerPlayerFormData = {
+    username:string,
+    password:string,
+    firstName:string,
+    lastName:string,
+    email:string,
+    photoUrl:string,
+}
+
+type loginFormData = {
+    username:string,
+    password:string,
+}
+
+type JwtPayload = {
+    username:string,
+}
+
+export type {
+    Player,
+    Settings,
+    quickBasketballContext,
+    registerPlayerFormData,
+    loginFormData,
+    JwtPayload,
+};

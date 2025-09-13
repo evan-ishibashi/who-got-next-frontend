@@ -4,7 +4,7 @@ import {Player} from "./types.tsx";
 import GameEndPopUp from './GameEndPopUp.tsx';
 import SettingsButton from './SettingsButton.tsx'
 
-import {useContext, useEffect, useState} from 'react'
+import {useContext, useEffect, useState, useRef} from 'react'
 import TeamScoreNext from "./TeamScoreNext.tsx";
 import TeamScoreGameNotStarted from "./TeamScoreGameNotStarted.tsx";
 import { settingsContext } from "./QuickBasketballPage.tsx";
@@ -29,6 +29,10 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
     const [teamOneLabel, setTeamOneLabel] = useState<String>("Home");
     const [teamTwoLabel, setTeamTwoLabel] = useState<String>("Away");
     const [teamOneWins, setTeamOneWins] = useState<boolean>(false);
+    const [teamsSwapped, setTeamsSwapped] = useState<boolean>(true);
+
+    // Ref to access clock component methods
+    const clockRef = useRef<any>(null);
 
     let isTied = teamOneScore === teamTwoScore ? true : false;
 
@@ -70,6 +74,113 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
         setIsFirstMount(false)
 
     },[gameLive]);
+
+    // Hot key functionality
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            // Check if focus is in any form input (input, textarea, select, or contenteditable)
+            const activeElement = document.activeElement;
+            const isFormElement = activeElement && (
+                activeElement.tagName === 'INPUT' ||
+                activeElement.tagName === 'TEXTAREA' ||
+                activeElement.tagName === 'SELECT' ||
+                activeElement.getAttribute('contenteditable') === 'true'
+            );
+
+            // Only handle hot keys if not focused on form elements
+            if (!isFormElement) {
+                switch (event.key) {
+                    case ' ':
+                        // Spacebar to start/pause
+                        event.preventDefault();
+                        if (clockRef.current) {
+                            clockRef.current.toggleTimer();
+                        }
+                        break;
+                    case '1':
+                        // Plus 1 for left team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamTwoScore(prev => Math.max(0, prev + 1));
+                        } else {
+                            setTeamOneScore(prev => Math.max(0, prev + 1));
+                        }
+                        break;
+                    case '2':
+                        // Plus 2 for left team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamTwoScore(prev => Math.max(0, prev + 2));
+                        } else {
+                            setTeamOneScore(prev => Math.max(0, prev + 2));
+                        }
+                        break;
+                    case '3':
+                        // Plus 3 for left team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamTwoScore(prev => Math.max(0, prev + 3));
+                        } else {
+                            setTeamOneScore(prev => Math.max(0, prev + 3));
+                        }
+                        break;
+                    case '4':
+                        // Minus 1 for left team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamTwoScore(prev => Math.max(0, prev - 1));
+                        } else {
+                            setTeamOneScore(prev => Math.max(0, prev - 1));
+                        }
+                        break;
+                    case '5':
+                        // Plus 1 for right team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamOneScore(prev => Math.max(0, prev + 1));
+                        } else {
+                            setTeamTwoScore(prev => Math.max(0, prev + 1));
+                        }
+                        break;
+                    case '6':
+                        // Plus 2 for right team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamOneScore(prev => Math.max(0, prev + 2));
+                        } else {
+                            setTeamTwoScore(prev => Math.max(0, prev + 2));
+                        }
+                        break;
+                    case '7':
+                        // Plus 3 for right team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamOneScore(prev => Math.max(0, prev + 3));
+                        } else {
+                            setTeamTwoScore(prev => Math.max(0, prev + 3));
+                        }
+                        break;
+                    case '8':
+                        // Minus 1 for right team
+                        event.preventDefault();
+                        if (teamsSwapped) {
+                            setTeamOneScore(prev => Math.max(0, prev - 1));
+                        } else {
+                            setTeamTwoScore(prev => Math.max(0, prev - 1));
+                        }
+                        break;
+                }
+            }
+        };
+
+        // Add event listener
+        document.addEventListener('keydown', handleKeyPress);
+
+        // Cleanup
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [teamsSwapped]); // Only teamsSwapped is needed since we use functional state updates
 
     const resetAllScore = () => {
         setTeamOneScore(0);
@@ -128,6 +239,10 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
         reverseRotatePlayers();
     }
 
+    const handleSwapTeams = () => {
+        setTeamsSwapped(!teamsSwapped);
+    }
+
 
 
 
@@ -136,28 +251,61 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
 
             <div className='flex flex-row justify-evenly '>
                 {
-                    fullDisplay
-                    ?
-                        gameHasStarted
-                        ?
-                        <TeamScore teamName={teamOneLabel} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score}/>
-                        :
-                        <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne}/>
-                    :
-                    <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
-                }
-                <Clock gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
-                {
-                    fullDisplay
-                    ?
-                        gameHasStarted
-                        ?
-
-                        <TeamScore teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score}/>
-                        :
-                        <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo}/>
-                    :
-                    <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                    teamsSwapped ? (
+                        // Default layout: teamTwo on the left, teamOne on the right
+                        <>
+                            {
+                                fullDisplay
+                                ?
+                                    gameHasStarted
+                                    ?
+                                    <TeamScore teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score}/>
+                                    :
+                                    <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                                :
+                                <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                            }
+                            <Clock ref={clockRef} gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
+                            {
+                                fullDisplay
+                                ?
+                                    gameHasStarted
+                                    ?
+                                    <TeamScore teamName={teamOneLabel} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score}/>
+                                    :
+                                    <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne}/>
+                                :
+                                <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
+                            }
+                        </>
+                    ) : (
+                        // Swapped layout: teamOne on the left, teamTwo on the right
+                        <>
+                            {
+                                fullDisplay
+                                ?
+                                    gameHasStarted
+                                    ?
+                                    <TeamScore teamName={teamOneLabel} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score}/>
+                                    :
+                                    <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne}/>
+                                :
+                                <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
+                            }
+                            <Clock ref={clockRef} gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
+                            {
+                                fullDisplay
+                                ?
+                                    gameHasStarted
+                                    ?
+                                    <TeamScore teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score}/>
+                                    :
+                                    <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                                :
+                                <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                            }
+                        </>
+                    )
                 }
             </div>
             <div className="flex flex-row justify-center bg-white mb-2 pb-2">
@@ -181,15 +329,21 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                         Undo Rotation
                 </button>
                 <button
-                    className={'bg-red-500 hover:bg-red-700 text-white font-bold px-4 rounded mt-2 mb-2'}
+                    className={'bg-red-500 hover:bg-red-700 text-white font-bold px-4 rounded mt-2 mb-2 mr-1'}
                     onClick={handleListReset}
                     >
                         Reset Players
                 </button>
+                <button
+                    className={'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mt-2 mb-2 mr-1'}
+                    onClick={handleSwapTeams}
+                    >
+                        {teamsSwapped ? 'Swap Teams' : 'Swap Back'}
+                </button>
                 <div className="mt-2 pl-2">
                     <SettingsButton />
                 </div>
-                <GameEndPopUp gameLive={gameLive} teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} teamOneWins={teamOneWins} isTied={isTied} rotatePlayers={rotatePlayers} resetAllScore={resetAllScore}/>
+                <GameEndPopUp gameLive={gameLive} teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} teamOneWins={teamOneWins} isTied={isTied} rotatePlayers={rotatePlayers} resetAllScore={resetAllScore} teamsSwapped={teamsSwapped}/>
             </div>
         </>
 

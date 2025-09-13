@@ -1,7 +1,13 @@
 import { BrowserRouter } from 'react-router-dom';
+import { useState, useEffect} from 'react';
+import {jwtDecode} from "jwt-decode";
+import { UserContext } from "./UserContext.tsx";
 import RoutesList from './RoutesList';
 import NavBar from './NavBar';
+import whoGotNextApi from './api.tsx'
 import './index.css'
+import { loginFormData, registerPlayerFormData } from './types.tsx';
+import ExtendedJwt from './interface.tsx';
 
 /** App: main app component
  *
@@ -10,13 +16,96 @@ import './index.css'
  */
 
 function App() {
+  const [token, setToken] = useState(localStorage.getItem("authToken"));
+    const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (token) {
+            try {
+                const payload = jwtDecode(token) as ExtendedJwt;
+                async function getUser() {
+                    const userData = await whoGotNextApi.getUser(payload.username);
+                    setUser(userData);
+                    setIsLoading(false);
+                }
+                getUser();
+            }
+            catch (error) {
+                console.error(error);
+            }
+        } else {
+            setIsLoading(false);
+        }
+
+    }, [token]);
+
+    /** Gets JWT
+     *
+     * - Takes in loginFormData
+     *
+     * - If successful, sets token state & JoblyApi.token
+     *
+     */
+
+    async function login(loginFormData:loginFormData) {
+        // post to /auth/token
+        const token = await whoGotNextApi.getTokenLogin(loginFormData);
+        setToken(token);
+        // update whoGotNextApi.token
+        localStorage.setItem("authToken", token);
+        whoGotNextApi.token = localStorage.getItem("authToken");
+
+    }
+
+    /** Gets JWT
+     *
+     * - Takes in registerFormData
+     *
+     * - If successful, sets token state & JoblyApi.token
+     *
+     */
+    async function register(registerFormData:registerPlayerFormData) {
+        // post to /auth/register
+        const token = await whoGotNextApi.getTokenRegister(registerFormData);
+        setToken(token);
+        // update JoblyAPI.token
+        localStorage.setItem("authToken", token);
+        whoGotNextApi.token = localStorage.getItem("authToken");
+    }
+
+    /**Logs Out Current User */
+    function logout() {
+        setUser(null);
+        setToken(null);
+        whoGotNextApi.token = "";
+        localStorage.removeItem("authToken");
+    }
+
+    /**Updates User */
+    // async function userUpdate(username:string, playerUpdateFormData:registerPlayerFormData) {
+    //     // patch request to /users/{username}
+    //     const newUser = await whoGotNextApi.patchUser(username, playerUpdateFormData);
+    //     // setUser(returned data from patch request)
+    //     setUser(newUser);
+    // }
+
+
+
+    if (isLoading) {
+        return (
+            <p>LOADING..</p>
+        );
+    }
 
   return (
-    <div className='bg-slate-200 mt-20'>
+    <div className='App bg-slate-200 mt-20'>
+      <UserContext.Provider value={{ user }}>
       <BrowserRouter>
-        <NavBar />
-        <RoutesList />
+        <NavBar logout={logout}/>
+        <RoutesList login={login} register={register}/>
       </BrowserRouter>
+      </UserContext.Provider>
     </div>
   );
 }
