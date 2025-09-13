@@ -29,6 +29,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
     const [teamOneLabel, setTeamOneLabel] = useState<String>("Home");
     const [teamTwoLabel, setTeamTwoLabel] = useState<String>("Away");
     const [teamOneWins, setTeamOneWins] = useState<boolean>(false);
+    const [teamsSwapped, setTeamsSwapped] = useState<boolean>(true);
 
     let isTied = teamOneScore === teamTwoScore ? true : false;
 
@@ -128,6 +129,10 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
         reverseRotatePlayers();
     }
 
+    const handleSwapTeams = () => {
+        setTeamsSwapped(!teamsSwapped);
+    }
+
 
 
 
@@ -136,28 +141,61 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
 
             <div className='flex flex-row justify-evenly '>
                 {
-                    fullDisplay
-                    ?
-                        gameHasStarted
-                        ?
-                        <TeamScore teamName={teamOneLabel} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score}/>
-                        :
-                        <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne}/>
-                    :
-                    <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
-                }
-                <Clock gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
-                {
-                    fullDisplay
-                    ?
-                        gameHasStarted
-                        ?
-
-                        <TeamScore teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score}/>
-                        :
-                        <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo}/>
-                    :
-                    <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                    teamsSwapped ? (
+                        // Default layout: teamTwo on the left, teamOne on the right
+                        <>
+                            {
+                                fullDisplay
+                                ?
+                                    gameHasStarted
+                                    ?
+                                    <TeamScore teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score}/>
+                                    :
+                                    <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                                :
+                                <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                            }
+                            <Clock gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
+                            {
+                                fullDisplay
+                                ?
+                                    gameHasStarted
+                                    ?
+                                    <TeamScore teamName={teamOneLabel} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score}/>
+                                    :
+                                    <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne}/>
+                                :
+                                <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
+                            }
+                        </>
+                    ) : (
+                        // Swapped layout: teamOne on the left, teamTwo on the right
+                        <>
+                            {
+                                fullDisplay
+                                ?
+                                    gameHasStarted
+                                    ?
+                                    <TeamScore teamName={teamOneLabel} teamMembers={teamOne} score={teamOneScore} updateScore={updateT1Score}/>
+                                    :
+                                    <TeamScoreGameNotStarted teamName={teamOneLabel} teamMembers={teamOne}/>
+                                :
+                                <TeamScoreNext teamName={teamOneLabel} teamMembers={teamOne}/>
+                            }
+                            <Clock gameLive={gameLive} setGameLive={setGameLive} toggleGameHasStarted={toggleGameHasStarted} resetAllScore={resetAllScore}/>
+                            {
+                                fullDisplay
+                                ?
+                                    gameHasStarted
+                                    ?
+                                    <TeamScore teamName={teamTwoLabel} teamMembers={teamTwo} score={teamTwoScore} updateScore={updateT2Score}/>
+                                    :
+                                    <TeamScoreGameNotStarted teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                                :
+                                <TeamScoreNext teamName={teamTwoLabel} teamMembers={teamTwo}/>
+                            }
+                        </>
+                    )
                 }
             </div>
             <div className="flex flex-row justify-center bg-white mb-2 pb-2">
@@ -181,10 +219,16 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                         Undo Rotation
                 </button>
                 <button
-                    className={'bg-red-500 hover:bg-red-700 text-white font-bold px-4 rounded mt-2 mb-2'}
+                    className={'bg-red-500 hover:bg-red-700 text-white font-bold px-4 rounded mt-2 mb-2 mr-1'}
                     onClick={handleListReset}
                     >
                         Reset Players
+                </button>
+                <button
+                    className={'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mt-2 mb-2 mr-1'}
+                    onClick={handleSwapTeams}
+                    >
+                        {teamsSwapped ? 'Swap Teams' : 'Swap Back'}
                 </button>
                 <div className="mt-2 pl-2">
                     <SettingsButton />
