@@ -9,7 +9,7 @@ const CONVERT2SECONDS = 60;
 
 import { useState, useRef, useEffect, useContext, forwardRef, useImperativeHandle } from 'react';
 import { settingsContext } from './QuickBasketballPage';
-import hornSound from './audio/buzzer/horn.mp3'
+import hornSound from '../audio/buzzer/horn.mp3'
 
 const Clock = forwardRef(({gameLive, setGameLive, toggleGameHasStarted, resetAllScore}:{gameLive:boolean, setGameLive:Function, toggleGameHasStarted:Function, resetAllScore:Function}, ref) => {
     const config = useContext(settingsContext); // use Context, which grabs settings

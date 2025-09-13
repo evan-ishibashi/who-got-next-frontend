@@ -1,6 +1,6 @@
 import Clock from "./Clock.tsx";
 import TeamScore from "./TeamScore.tsx";
-import {Player} from "./types.tsx";
+import {Player} from "../types.tsx";
 import GameEndPopUp from './GameEndPopUp.tsx';
 import SettingsButton from './SettingsButton.tsx'
 

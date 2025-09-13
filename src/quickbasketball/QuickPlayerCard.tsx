@@ -1,5 +1,5 @@
 import { UniqueIdentifier } from "@dnd-kit/core";
-import {Player} from './types.tsx'
+import {Player} from '../types.tsx'
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from '@dnd-kit/utilities'
 import 'reactjs-popup/dist/index.css';

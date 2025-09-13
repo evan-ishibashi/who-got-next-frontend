@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import QuickBasketballPlayerList from './QuickBasketballPlayerList';
 import { DndContext, PointerSensor, UniqueIdentifier, closestCorners, useSensors, useSensor, TouchSensor, KeyboardSensor } from '@dnd-kit/core';
-import {Player, Settings, quickBasketballContext} from './types';
-import { DEFAULT_SETTINGS } from './Utils';
+import {Player, Settings, quickBasketballContext} from '../types';
+import { DEFAULT_SETTINGS } from '../Utils';
 import { createContext } from "react";
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import ScoreBoard from './Scoreboard';
-import allenHello from './audio/personal/allenhello.mp3';
+import allenHello from '../audio/personal/allenhello.mp3';
 
 
 /** BasketballQuickPage:

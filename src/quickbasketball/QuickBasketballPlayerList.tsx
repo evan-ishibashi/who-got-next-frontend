@@ -1,6 +1,6 @@
 import QuickAddPlayer from "./QuickAddPlayer.tsx";
 import QuickPlayerCard from "./QuickPlayerCard.tsx";
-import {Player} from "./types.tsx";
+import {Player} from "../types.tsx";
 import { useContext } from "react";
 
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";

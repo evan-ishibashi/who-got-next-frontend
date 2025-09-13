@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import Home from "./Home.tsx";
-import QuickBasketballPage from "./QuickBasketballPage.tsx";
+import QuickBasketballPage from "./quickbasketball/QuickBasketballPage.tsx";
 import { UserContext } from "./UserContext.tsx";
 import LoginPage from "./pages/LoginPage.tsx"
 import RegisterPage from "./pages/RegisterPage.tsx"

@@ -1,6 +1,6 @@
-import {Player} from './types.tsx'
-import PointButton from './PointButton.tsx';
-import ScoreBoardName from './ScoreBoardName.tsx'
+import {Player} from '../types.tsx'
+import PointButton from '../PointButton.tsx';
+import ScoreBoardName from '../ScoreBoardName.tsx'
 /** TeamScore: displays scoreboard
  *
  * Props:
