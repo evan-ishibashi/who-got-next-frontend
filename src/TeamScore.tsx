@@ -16,7 +16,7 @@ function TeamScore({ teamName, teamMembers, updateScore, score }: { teamName:Str
         <div className="text-center">
             <div className='bg-blue-200 rounded pb-2'>
 
-                <h1 className='text-3xl text-bold'>
+                <h1 className='text-3xl font-bold text-black drop-shadow-lg'>
                     {teamName}
                     </h1>
                 <div className='flex flex-row justify-evenly'>
@@ -29,7 +29,7 @@ function TeamScore({ teamName, teamMembers, updateScore, score }: { teamName:Str
 
             </div>
 
-        <h2 className='text-xl md:text-6xl md:mb-4 md:mt-3 bg-white'>{score}</h2>
+        <h2 className='text-xl md:text-6xl md:mb-4 md:mt-3 bg-white font-bold text-black drop-shadow-lg'>{score}</h2>
         <div className='flex flex-row justify-evenly'>
             <PointButton pointValue={1} updateScore={updateScore} />
             <PointButton pointValue={2} updateScore={updateScore}/>

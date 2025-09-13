@@ -19,11 +19,11 @@ function GameEndPlayerCard({ player, displayRecord }: {player: Player, displayRe
   return (
     <div className="flex flex-row justify-center">
 
-        <div className="text-3xl">
+        <div className="text-3xl font-bold text-black drop-shadow-lg">
             {player.name}
         </div>
         { displayRecord &&
-          <div className="text-small pl-10 pt-2 justify-self-end">
+          <div className="text-small pl-10 pt-2 justify-self-end font-bold text-black drop-shadow-md">
             W: {player.winCount} L: {player.lossCount} T: {player.tieCount}
         </div>
         }

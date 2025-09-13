@@ -15,7 +15,7 @@ function TeamScoreGameNotStarted({ teamName, teamMembers }: { teamName:String, t
         <div className="text-center">
             <div className='bg-blue-200 rounded pb-2'>
 
-                <h1 className='text-3xl text-bold'>
+                <h1 className='text-3xl font-bold text-black drop-shadow-lg'>
                     {teamName}
                     </h1>
                 <div className='flex flex-row justify-evenly'>
@@ -28,8 +28,8 @@ function TeamScoreGameNotStarted({ teamName, teamMembers }: { teamName:String, t
 
             </div>
 
-        <h2 className='text-small md:text-6xl md:mb-4 md:mt-3 bg-white'>CHECK IT UP</h2>
-        <div className='flex flex-row justify-evenly'>
+        <h2 className='text-small md:text-6xl md:mb-4 md:mt-3 bg-white font-bold text-black drop-shadow-lg'>CHECK IT UP</h2>
+        <div className='flex flex-row justify-evenly font-bold text-black drop-shadow-md'>
             Please Start Game
         </div>
 

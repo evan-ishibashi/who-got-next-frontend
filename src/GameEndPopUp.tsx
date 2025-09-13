@@ -117,7 +117,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
               // When teams are swapped: teamTwo on left, teamOne on right
               <>
                 <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-red-300' : 'bg-green-300'}`}>
-                  <h1 className='text-4xl bg-gray-200'>
+                  <h1 className='text-4xl bg-gray-200 font-bold text-black drop-shadow-lg'>
                     {isTied ? 'You Tied' : teamOneWins ? "Losing Team" : "Winning Team"}
                   </h1>
                   {
@@ -130,7 +130,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
                   </div>
                 </div>
                 <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-green-300' : 'bg-red-300'}`}>
-                  <h1 className='text-4xl bg-gray-200'>
+                  <h1 className='text-4xl bg-gray-200 font-bold text-black drop-shadow-lg'>
                     {isTied ? 'You Tied' : teamOneWins ? "Winning Team" : "Losing Team"}
                   </h1>
                   {
@@ -147,7 +147,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
               // Default layout: teamOne on left, teamTwo on right
               <>
                 <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-green-300' : 'bg-red-300'}`}>
-                  <h1 className='text-4xl bg-gray-200'>
+                  <h1 className='text-4xl bg-gray-200 font-bold text-black drop-shadow-lg'>
                     {isTied ? 'You Tied' : teamOneWins ? "Winning Team" : "Losing Team"}
                   </h1>
                   {
@@ -160,7 +160,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
                   </div>
                 </div>
                 <div className={`flex flex-col text-center ${isTied ? 'bg-orange-100' : teamOneWins ? 'bg-red-300' : 'bg-green-300'}`}>
-                  <h1 className='text-4xl bg-gray-200'>
+                  <h1 className='text-4xl bg-gray-200 font-bold text-black drop-shadow-lg'>
                     {isTied ? 'You Tied' : teamOneWins ? "Losing Team" : "Winning Team"}
                   </h1>
                   {
@@ -176,7 +176,7 @@ const GameEndPopUp = ({ gameLive, teamOne, teamTwo, teamNext, teamOneWins, isTie
             )}
           </div>
           <div className='text-center bg-white'>
-            <h1 className='text-4xl bg-yellow-300'>Up Next</h1>
+            <h1 className='text-4xl bg-yellow-300 font-bold text-black drop-shadow-lg'>Up Next</h1>
             {
               teamNext.map((player: Player, idx) => (
                 <GameEndPlayerCard key={idx} player={player} displayRecord={true}/>
