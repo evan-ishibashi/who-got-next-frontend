@@ -15,7 +15,7 @@ function TeamScoreNext({ teamName, teamMembers }: { teamName:String, teamMembers
         <div className="text-center">
             <div className='bg-white rounded'>
 
-                <h1 className='text-3xl text-bold bg-yellow-300'>
+                <h1 className='text-3xl font-bold text-black drop-shadow-lg bg-yellow-300'>
                     {teamName}
                     </h1>
                 <div className='flex flex-col justify-evenly'>

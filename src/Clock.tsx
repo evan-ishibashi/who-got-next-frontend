@@ -136,8 +136,10 @@ const Clock = forwardRef(({gameLive, setGameLive, toggleGameHasStarted, resetAll
     // Handles updating game and break time clock display
     useEffect(()=>{
         if (isFirstMount) setTime(gameTimeInSecs)
-        if (gameLive && !isActive) setTime(gameTimeInSecs);
-        if (!gameLive && !isFirstMount) setTime(restTimeInSecs);
+        // Only reset time to gameTimeInSecs when starting a new game, not when pausing/resuming
+        if (gameLive && !isActive && isFirstMount) setTime(gameTimeInSecs);
+        // Only reset rest clock when transitioning from game to rest, not when pausing during rest
+        // This is handled in the gameLive useEffect above, so we don't need to reset here
     },[config, gameTimeInSecs, restTimeInSecs, gameLive, isActive, isFirstMount])
 
     // Reset showZeroTime when time changes (clock restarted)

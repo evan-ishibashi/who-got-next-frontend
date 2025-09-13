@@ -18,7 +18,7 @@ function ScoreBoardName({ player }: {player: Player}) {
   return (
 
         <div
-            className="invisible md:visible bg-black text-white font-bold px-0.5 rounded mr-0.5 mt-0.5 mb-1/2 md:text-3xl text-center"
+            className="invisible md:visible bg-black text-white font-bold px-0.5 rounded mr-0.5 mt-0.5 mb-1/2 md:text-3xl text-center drop-shadow-2xl shadow-white/50"
 
         >
             {player.name}
