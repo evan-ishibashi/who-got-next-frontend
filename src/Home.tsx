@@ -27,10 +27,8 @@ const Home = () => {
             <p className="mt-4 mb-6 text-lg text-gray-600">
               A place where you can track player rotations for your pick up games.
             </p>
-            <Link to="/guest/basketball" className="mt-6">
-              <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded">
-                Try It!
-              </a>
+            <Link to="/guest/basketball" className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded inline-block">
+              Try It!
             </Link>
           </div>
         </div>

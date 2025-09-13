@@ -24,12 +24,12 @@ function App() {
         if (token) {
             try {
                 const payload = jwtDecode(token) as ExtendedJwt;
-                async function getUser() {
-                    const userData = await whoGotNextApi.getUser(payload.username);
+                async function getPlayer() {
+                    const userData = await whoGotNextApi.getPlayer(payload.username);
                     setUser(userData);
                     setIsLoading(false);
                 }
-                getUser();
+                getPlayer();
             }
             catch (error) {
                 console.error(error);

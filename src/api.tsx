@@ -1,6 +1,6 @@
 import { loginFormData, registerPlayerFormData } from "./types";
 
-const BASE_URL = "http://localhost:3002";
+const BASE_URL = "http://localhost:3001";
 
 /** API Class.
  *
@@ -15,17 +15,21 @@ class whoGotNextApi {
     // We're providing a token you can use to interact with the backend API
     // DON'T MODIFY THIS TOKEN
     static token =
-    // localStorage.getItem("authToken");
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
-    "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
-    "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
+    localStorage.getItem("authToken");
+    // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
+    // "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
+    // "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
 
     static async request(endpoint:String, data = {}, method = "GET") {
         const url = new URL(`${BASE_URL}/${endpoint}`);
-        const headers = {
-            authorization: `Bearer ${whoGotNextApi.token}`,
+        const headers: any = {
             "content-type": "application/json",
         };
+
+        // Only add authorization header for non-auth endpoints
+        if (!endpoint.startsWith('auth/')) {
+            headers.authorization = `Bearer ${whoGotNextApi.token}`;
+        }
 
         url.search =
             method === "GET" ? new URLSearchParams(data).toString() : "";
@@ -38,7 +42,14 @@ class whoGotNextApi {
         //fetch API does not throw an error, have to dig into the resp for msgs
         if (!resp.ok) {
             console.error("API Error:", resp.statusText, resp.status);
-            const { error } = await resp.json();
+            let error;
+            try {
+                const errorData = await resp.json();
+                error = errorData.error;
+            } catch (parseError) {
+                // If response is not JSON, use status text
+                error = resp.statusText || `HTTP ${resp.status} Error`;
+            }
             throw Array.isArray(error) ? error : [error];
         }
 
@@ -94,7 +105,11 @@ class whoGotNextApi {
      * Returns jwt
     */
     static async getTokenRegister(formData:registerPlayerFormData) {
-        let res = await whoGotNextApi.request(`auth/register`, formData, "POST");
+        // Remove photoUrl if it's empty to avoid validation errors
+        const { photoUrl, ...dataToSend } = formData;
+        const cleanData = photoUrl && photoUrl.trim() !== "" ? formData : dataToSend;
+
+        let res = await whoGotNextApi.request(`auth/register`, cleanData, "POST");
         return res.token;
     }
 
@@ -104,9 +119,9 @@ class whoGotNextApi {
      *
      * Returns userData: {username, firstName, lastName, email, applications}
     */
-    static async getUser(username:string) {
-        let res = await whoGotNextApi.request(`users/${username}`);
-        return res.user;
+    static async getPlayer(playerName:string) {
+        let res = await whoGotNextApi.request(`players/${playerName}`);
+        return res.player;
     }
 
     /** Updates User
@@ -116,7 +131,7 @@ class whoGotNextApi {
      * Returns userData: {username, firstName, lastName, email, applications}
     */
     static async patchUser(username:String, formData:registerPlayerFormData) {
-        let res = await whoGotNextApi.request(`users/${username}`, formData, "PATCH");
+        let res = await whoGotNextApi.request(`players/${username}`, formData, "PATCH");
         return res.user;
     }
 
