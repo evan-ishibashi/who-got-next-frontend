@@ -170,6 +170,13 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                             setTeamTwoScore(prev => Math.max(0, prev - 1));
                         }
                         break;
+                    case '/':
+                        // End Game / End Break (only works when button is enabled)
+                        if (gameHasStarted) {
+                            event.preventDefault();
+                            handleEndClick();
+                        }
+                        break;
                 }
             }
         };
@@ -181,7 +188,7 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };
-    }, [teamsSwapped]); // Only teamsSwapped is needed since we use functional state updates
+    }, [teamsSwapped, gameHasStarted]); // Include gameHasStarted for the '/' hotkey
 
     const resetAllScore = () => {
         setTeamOneScore(0);
