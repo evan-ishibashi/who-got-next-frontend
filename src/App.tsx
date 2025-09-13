@@ -16,7 +16,7 @@ import ExtendedJwt from './interface.tsx';
  */
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("authToken"));
+  const [token, setToken] = useState(localStorage.getItem("authToken") || "");
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -54,7 +54,7 @@ function App() {
         setToken(token);
         // update whoGotNextApi.token
         localStorage.setItem("authToken", token);
-        whoGotNextApi.token = localStorage.getItem("authToken");
+        whoGotNextApi.token = token;
 
     }
 
@@ -69,15 +69,15 @@ function App() {
         // post to /auth/register
         const token = await whoGotNextApi.getTokenRegister(registerFormData);
         setToken(token);
-        // update JoblyAPI.token
+        // update whoGotNextApi.token
         localStorage.setItem("authToken", token);
-        whoGotNextApi.token = localStorage.getItem("authToken");
+        whoGotNextApi.token = token;
     }
 
     /**Logs Out Current User */
     function logout() {
         setUser(null);
-        setToken(null);
+        setToken("");
         whoGotNextApi.token = "";
         localStorage.removeItem("authToken");
     }
