@@ -351,6 +351,32 @@ function ScoreBoard({ teamOne, teamTwo, teamNext, gameLive, setGameLive, rotateP
                 <div className="mt-2 pl-2">
                     <SettingsButton />
                 </div>
+                {/* Info Icon with Tooltip */}
+                <div className="relative group ml-2">
+                    <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold cursor-help mt-2">
+                        i
+                    </div>
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                        <div className="text-center">
+                            <div className="font-bold mb-1">Hotkeys:</div>
+                            <div>Space/Enter : Start/Pause Clock</div>
+                            <div>/ : End Game/Break</div>
+                            <div>For Left Team Score:</div>
+                            <div>1 : +1</div>
+                            <div>2 : +2</div>
+                            <div>3 : +3</div>
+                            <div>4 : -1</div>
+                            <div>For Right Team Score:</div>
+                            <div>7 : +1</div>
+                            <div>8 : +2</div>
+                            <div>9 : +3</div>
+                            <div>6 : -1</div>
+                        </div>
+                        {/* Arrow pointing down */}
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                    </div>
+                </div>
                 <GameEndPopUp gameLive={gameLive} teamOne={teamOne} teamTwo={teamTwo} teamNext={teamNext} teamOneWins={teamOneWins} isTied={isTied} rotatePlayers={rotatePlayers} resetAllScore={resetAllScore} teamsSwapped={teamsSwapped}/>
             </div>
         </>
