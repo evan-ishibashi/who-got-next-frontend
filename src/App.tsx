@@ -111,7 +111,7 @@ function AppContent() {
 
   return (
     <div className='App bg-slate-200 pt-16'>
-      <UserContext.Provider value={{ user }}>
+      <UserContext.Provider value={{ user, setUser }}>
       <BrowserRouter>
         <NavBar logout={logout}/>
         <RoutesList login={login} register={register}/>

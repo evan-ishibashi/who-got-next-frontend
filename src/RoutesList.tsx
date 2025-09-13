@@ -5,6 +5,7 @@ import QuickBasketballPage from "./quickbasketball/QuickBasketballPage.tsx";
 import BasketballPage from "./pages/BasketballPage.tsx";
 import YourLeaguesPage from "./pages/YourLeaguesPage.tsx";
 import CreateLeaguePage from "./pages/CreateLeaguePage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 import { UserContext } from "./UserContext.tsx";
 import LoginPage from "./pages/LoginPage.tsx"
 import RegisterPage from "./pages/RegisterPage.tsx"
@@ -15,7 +16,8 @@ import RegisterPage from "./pages/RegisterPage.tsx"
  */
 
 function RoutesList({login, register}:{login:Function, register:Function}) {
-  const { user } = useContext(UserContext);
+  const userContext = useContext(UserContext);
+  const user = userContext?.user;
   return (
 
     <Routes>
@@ -31,6 +33,7 @@ function RoutesList({login, register}:{login:Function, register:Function}) {
       <Route path='/basketball/your-leagues' element={<YourLeaguesPage />} />
       <Route path='/basketball/create-league' element={<CreateLeaguePage />} />
       <Route path='/guest/basketball' element={<QuickBasketballPage />} />
+      {user && <Route path='/profile' element={<ProfilePage />} />}
       <Route path='*' element={<Navigate to='/' />} />
     </Routes>
   );
